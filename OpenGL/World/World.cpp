@@ -1,0 +1,56 @@
+#include "World.h"
+
+#include "../../EditorUI/EntitiesListWindow.h"
+#include "../Entities/Entity.h"
+#include "ImGui/imgui.h"
+
+World* World::m_instance = nullptr;
+static Entity* m_selectedEntity;
+World::World()
+{
+    m_window = EntitiesListWindow::GetInstance();
+    m_selectedEntity = nullptr; // Inicializar la entidad seleccionada como nullptr
+}
+
+World* World::GetInstance()
+{
+    if (!m_instance)
+    {
+        m_instance = new World();
+    }
+    return m_instance;
+}
+
+void World::Draw()
+{
+    for (Entity* entity : m_entities)
+    {
+        entity->Draw();
+    }
+    
+    // ImGui::Begin("Entity List");
+    //
+    // for (Entity* entity : m_entities)
+    // {
+    //     bool isSelected = (entity == m_selectedEntity);
+    //     if (ImGui::Selectable(entity->GetName().c_str(), isSelected))
+    //     {
+    //         m_selectedEntity = entity;
+    //         m_window->SetObject(entity);
+    //     }
+    // }
+    //
+    // ImGui::End();
+    // m_window->DrawWindow();
+}
+
+void World::AddEntity(Entity* _entity)
+{
+    m_entities.push_back(_entity);
+    m_entitiesNames.push_back(_entity->GetName().c_str());
+}
+
+std::vector<Entity*>& World::GetEntities()
+{
+    return m_entities;
+}
