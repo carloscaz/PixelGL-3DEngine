@@ -122,3 +122,10 @@ void Shader::SetMatrix(const char* _location, const glm::mat4& _matrix)
     glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(_matrix));
 }
 
+void Shader::SetFloat(const char* _location, float _value)
+{
+    glUseProgram(m_id);
+    unsigned int loc = glGetUniformLocation(m_id, _location);
+    glUniform1f(loc, _value);
+}
+

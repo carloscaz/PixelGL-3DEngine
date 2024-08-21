@@ -250,6 +250,7 @@
       <AdditionalIncludeDirectories>C:\Users\Carlos\Documents\GitHub\OpenGl\Engine\PixelGL\\Dependencies\include;</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="OpenGL\Buffers\FrameBuffer.cpp" />
     <ClCompile Include="OpenGL\Entities\Camera.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -326,6 +327,7 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="OpenGL\Entities\Entity.cpp" />
+    <ClCompile Include="OpenGL\Entities\Light.cpp" />
     <ClCompile Include="OpenGL\GLUtils.cpp" />
     <ClCompile Include="OpenGL\Material\Material.cpp" />
     <ClCompile Include="OpenGL\Shaders\Shader.cpp">
@@ -430,8 +432,10 @@
     <ClInclude Include="Math\Vector2\Vector2.h" />
     <ClInclude Include="Math\Vector3\Vector3.h" />
     <ClInclude Include="OpenGL\Buffers\Buffer.h" />
+    <ClInclude Include="OpenGL\Buffers\FrameBuffer.h" />
     <ClInclude Include="OpenGL\Entities\Camera.h" />
     <ClInclude Include="OpenGL\Entities\Entity.h" />
+    <ClInclude Include="OpenGL\Entities\Light.h" />
     <ClInclude Include="OpenGL\GlUtils.h" />
     <ClInclude Include="OpenGL\Material\Material.h" />
     <ClInclude Include="OpenGL\Shaders\Shader.h" />
@@ -448,6 +452,10 @@
     <Content Include="Data\Shaders\3DShader\VertexShader.glsl" />
     <Content Include="Data\Shaders\BasicShader\FragmentShader.glsl" />
     <Content Include="Data\Shaders\BasicShader\VertexShader.glsl" />
+    <Content Include="Data\Shaders\LightShader\FragmentShader.glsl" />
+    <Content Include="Data\Shaders\LightShader\VertexShader.glsl" />
+    <Content Include="Data\Shaders\SceneShader\FragmentShader.glsl" />
+    <Content Include="Data\Shaders\SceneShader\VertexShader.glsl" />
     <Content Include="Data\Shaders\TextureShader\FragmentShader.glsl" />
     <Content Include="Data\Shaders\TextureShader\VertexShader.glsl" />
   </ItemGroup>

@@ -30,11 +30,13 @@ public:
     std::string GetName() const;
     Material* GetMaterial() const;
 
-    void SetPosition(const Vector3& _position);
-    void SetRotation(const Vector3& _rotation);
-    void SetScale(const Vector3& _scale);
+    virtual void SetPosition(const Vector3& _position);
+    virtual void SetRotation(const Vector3& _rotation);
+    virtual void SetScale(const Vector3& _scale);
     void SetBuffer(Buffer* buffer);
     void SetGuiActtive(bool _value);
+
+    virtual void ShowGUIDetails();
 
     void Draw();
 };

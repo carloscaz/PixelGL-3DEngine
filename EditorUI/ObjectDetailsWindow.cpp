@@ -41,23 +41,13 @@ void ObjectDetailsWindow::DrawWindow()
                 ImGui::TreePop();
             }
             if (ImGui::TreeNode("Scale")) {
-                ImGui::DragFloat3("##Scale", &objectScale.x, 0.2f);
+                ImGui::DragFloat3("##Scale", &objectScale.x, 0.05f);
                 m_currentObject->SetScale(objectScale);
                 ImGui::TreePop();
             }
         }
         
-        if (ImGui::CollapsingHeader("Object Material")) {
-            if(m_currentObject->GetMaterial())
-            {
-                ImGui::Text("Object Material: %s", m_currentObject->GetMaterial()->GetName().c_str());
-            }
-
-            else
-            {
-                ImGui::Text("Object Material: Material not assigned");
-            }
-        }
+        m_currentObject->ShowGUIDetails();
     }
     ImGui::End();
 }

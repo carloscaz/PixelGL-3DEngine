@@ -8,10 +8,7 @@
 
 #include "Camera.h"
 #include "../Shaders/Shader.h"
-#include "../GlUtils.h"
-#include "../State/State.h"
 #include "../World/World.h"
-#include "ImGui/imgui.h"
 
 Entity::Entity() : m_material(nullptr), m_position(Vector3()), m_rotation(Vector3()), m_scale(Vector3(1,1,1)), m_name("Entity")
 {
@@ -74,6 +71,11 @@ void Entity::SetBuffer(Buffer* buffer)
 void Entity::SetGuiActtive(bool _value)
 {
     m_GUIActive = _value;
+}
+
+void Entity::ShowGUIDetails()
+{
+    m_material->ShowGUIDetails();
 }
 
 void Entity::Draw()

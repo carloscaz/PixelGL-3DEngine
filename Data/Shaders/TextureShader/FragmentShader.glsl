@@ -9,5 +9,6 @@ out vec4 FragColor;
 
 void main()
 {
-    FragColor = texture(tex, fTex);
+    vec3 light = vec3(1.0f) * 0.5f;
+    FragColor = texture(tex, fTex) * vec4(light, 1.0f);
 } 

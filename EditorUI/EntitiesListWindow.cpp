@@ -26,7 +26,7 @@ EntitiesListWindow* EntitiesListWindow::GetInstance()
 
 void EntitiesListWindow::DrawWindow()
 {
-    ImGui::Begin("Entity List");
+    ImGui::Begin("Entities List");
     
     for (Entity* entity : World::GetInstance()->GetEntities())
     {

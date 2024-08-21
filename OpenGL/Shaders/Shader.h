@@ -23,4 +23,5 @@ public:
     void UseShader();
     void SetVec3(const char* _loc, const Vector3& _value);
     void SetMatrix(const char* _location, const glm::mat4& _matrix);
+    void SetFloat(const char* _location, float _value);
 };

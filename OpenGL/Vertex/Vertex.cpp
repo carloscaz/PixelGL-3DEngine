@@ -12,3 +12,7 @@ Vertex::Vertex(const Vector3& _pos, const Vector3& _color) : m_position(_pos), m
 Vertex::Vertex(const Vector3& _pos, const Vector3& _color, const Vector2& _tex): m_position(_pos), m_color(_color), m_tex(_tex)
 {
 }
+
+Vertex::Vertex(const Vector3& _pos, const Vector3& _color, const Vector2& _tex, Vector3 _normal): m_position(_pos), m_color(_color), m_tex(_tex), m_normal(_normal)
+{
+}
