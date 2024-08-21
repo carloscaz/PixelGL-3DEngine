@@ -24,7 +24,9 @@ private:
     float m_lightIntensity = 1.0f;
     Vector3 m_lightColor =  Vector3(1.0f, 1.0f,1.0f);
 
+
 public:
+    ~World();
     static World* GetInstance();
     
     void Draw();
@@ -38,8 +40,10 @@ public:
     Vector3 GetLightColor() const;
     void SetLightColor(const Vector3 _color);
     Light* GetLight(unsigned int _index);
+    
 
     std::vector<Entity*>& GetEntities();
+    std::vector<Light*>& GetLights();
 
     void Tick();
 };

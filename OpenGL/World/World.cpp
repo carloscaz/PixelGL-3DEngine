@@ -3,6 +3,7 @@
 #include "../../EditorUI/EntitiesListWindow.h"
 #include "../Entities/Camera.h"
 #include "../Entities/Entity.h"
+#include "../Entities/Light.h"
 #include "ImGui/imgui.h"
 
 World* World::m_instance = nullptr;
@@ -11,6 +12,16 @@ World::World()
 {
     m_window = EntitiesListWindow::GetInstance();
     m_selectedEntity = nullptr; // Inicializar la entidad seleccionada como nullptr
+}
+
+World::~World()
+{
+    for (Entity* entity : m_entities)
+    {
+        delete entity;
+    }
+    m_entities.clear();
+    m_lights.clear();
 }
 
 World* World::GetInstance()
@@ -28,21 +39,6 @@ void World::Draw()
     {
         entity->Draw();
     }
-    
-    // ImGui::Begin("Entity List");
-    //
-    // for (Entity* entity : m_entities)
-    // {
-    //     bool isSelected = (entity == m_selectedEntity);
-    //     if (ImGui::Selectable(entity->GetName().c_str(), isSelected))
-    //     {
-    //         m_selectedEntity = entity;
-    //         m_window->SetObject(entity);
-    //     }
-    // }
-    //
-    // ImGui::End();
-    // m_window->DrawWindow();
 }
 
 void World::AddEntity(Entity* _entity)
@@ -94,6 +90,11 @@ Light* World::GetLight(unsigned int _index)
 std::vector<Entity*>& World::GetEntities()
 {
     return m_entities;
+}
+
+std::vector<Light*>& World::GetLights()
+{
+    return m_lights;
 }
 
 void World::Tick()

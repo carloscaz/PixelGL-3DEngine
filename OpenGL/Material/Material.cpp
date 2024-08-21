@@ -27,6 +27,7 @@ Material::Material(Texture* _texture, Shader* _shader, std::string& _name, const
       m_specular(_specular),
       m_shininess(_shininess)
 {
+    if(_texture)
     m_textures.push_back(_texture);
 }
 
@@ -42,8 +43,11 @@ void Material::Prepare()
         glBindTexture(GL_TEXTURE_2D, m_textures[i]->GetId());
     }
 
-    World::GetInstance()->GetLight(0)->Prepare();
-
+    for (Light* light : World::GetInstance()->GetLights())
+    {
+        light->Prepare();
+    }
+    
     //Set lights
     m_shader->SetFloat("ambientLight", World::GetInstance()->GetlightIntensity());
     m_shader->SetVec3("light.position", World::GetInstance()->GetLight(0)->GetPosition());

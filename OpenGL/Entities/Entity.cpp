@@ -80,7 +80,10 @@ void Entity::ShowGUIDetails()
 
 void Entity::Draw()
 {
-    m_material->Prepare();
+    if(m_material)
+    {
+        m_material->Prepare();
+    }
     
     World::GetInstance()->GetActiveCamera()->Prepare(m_material->GetShader());
     

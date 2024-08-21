@@ -6,3 +6,9 @@ extern int windowHeight;
 
 bool InitEngine(GLFWwindow*& _window);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+
+namespace GLUtils
+{
+    void CreateLight();
+    void CreateCube();
+}

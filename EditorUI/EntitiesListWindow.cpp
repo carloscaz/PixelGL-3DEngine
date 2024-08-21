@@ -1,5 +1,7 @@
 #include "EntitiesListWindow.h"
 
+#include <iostream>
+
 #include "ImGui/imgui.h"
 #include "../OpenGL/Entities/Entity.h"
 #include "../OpenGL/World/World.h"
