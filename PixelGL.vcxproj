@@ -454,6 +454,8 @@
     <Content Include="Data\Shaders\BasicShader\VertexShader.glsl" />
     <Content Include="Data\Shaders\LightShader\FragmentShader.glsl" />
     <Content Include="Data\Shaders\LightShader\VertexShader.glsl" />
+    <Content Include="Data\Shaders\LightSourceShader\FragmentShader.glsl" />
+    <Content Include="Data\Shaders\LightSourceShader\VertexShader.glsl" />
     <Content Include="Data\Shaders\SceneShader\FragmentShader.glsl" />
     <Content Include="Data\Shaders\SceneShader\VertexShader.glsl" />
     <Content Include="Data\Shaders\TextureShader\FragmentShader.glsl" />

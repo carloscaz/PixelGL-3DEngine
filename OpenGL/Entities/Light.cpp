@@ -1,6 +1,59 @@
 #include "Light.h"
 
-Light::Light(Material* _material, const std::string& _name) : Entity(_material, _name)
+#include "../Material/Material.h"
+#include "../Shaders/Shader.h"
+#include "ImGui/imgui.h"
+
+Light::Light(Material* _material, const std::string& _name)
+    :
+    Entity(_material, _name),
+    m_color(Vector3( 1.0f, 1.0f, 1.0f)),
+    m_diffuse(Vector3(0.5f, 0.5f, 0.5f)),
+    m_specular(Vector3(1.0f, 1.0f, 1.0f)),
+    m_strength(1.0f)
 {
     m_scale = Vector3(0.2f, 0.2f, 0.2f);
+}
+
+void Light::ShowGUIDetails()
+{
+    if (ImGui::CollapsingHeader("Light Properties"))
+    {
+        ImGui::Text("Light color");
+        ImGui::ColorEdit3("##Light color", &m_color.x);
+        ImGui::Spacing();
+        ImGui::Text("Light diffuse");
+        ImGui::DragFloat3("##Light diffuse", &m_diffuse.x, 0.01f, 0, 1);
+        ImGui::Spacing();
+        ImGui::Text("Light specular");
+        ImGui::DragFloat3("##Light specular", &m_specular.x, 0.01f, 0, 1);
+        ImGui::Spacing();
+        ImGui::Text("Light strength");
+        ImGui::DragFloat("##Light strength", &m_strength, 0.01f, 0, 1);
+    }
+}
+
+Vector3 Light::GetLightColor() const
+{
+    return m_color;
+}
+
+Vector3 Light::GetLightDiffuse() const
+{
+    return m_diffuse;
+}
+
+Vector3 Light::GetLightSpecular() const
+{
+    return m_specular;
+}
+
+float Light::GetLightStrength() const
+{
+    return m_strength;
+}
+
+void Light::Prepare()
+{
+    m_material->GetShader()->SetVec3("color", m_color);
 }

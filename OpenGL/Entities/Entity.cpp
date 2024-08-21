@@ -90,9 +90,7 @@ void Entity::Draw()
     m_modelMatrix = rotate(m_modelMatrix, glm::radians(m_rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
     m_modelMatrix = rotate(m_modelMatrix, glm::radians(m_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
     m_modelMatrix = scale(m_modelMatrix, glm::vec3(m_scale.x, m_scale.y, m_scale.z));
-
-    //m_material->GetShader()->SetMatrix("projection", State::GetIntance()->GetProjectionMatrix());
-    //m_material->GetShader()->SetMatrix("view", World::GetInstance()->GetActiveCamera()->GetViewMatrix());
+    
     m_material->GetShader()->SetMatrix("model", m_modelMatrix);
 
     m_buffer->Draw();

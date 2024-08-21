@@ -14,6 +14,7 @@ Texture* Texture::Load(const char* _filename)
 {
     Texture* texture = new Texture();
 
+    texture->m_name = _filename;
     //Bind texture data in OpenGL
     glGenTextures(1, &texture->m_tex);
     glBindTexture(GL_TEXTURE_2D, texture->m_tex);
@@ -64,4 +65,9 @@ Texture* Texture::Load(const char* _filename)
 unsigned int Texture::GetId()
 {
     return m_tex;
+}
+
+const char* Texture::GetName()
+{
+    return m_name;
 }

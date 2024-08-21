@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 #include "../../Math/Vector3/Vector3.h"
 #include "../Textures/Texture.h"
@@ -11,6 +12,7 @@ class Material
 {
 private:
     Texture* m_texture;
+    std::vector<Texture*> m_textures;
     Shader* m_shader;
     std::string m_name;
 
@@ -31,4 +33,5 @@ const Vector3& _diffuse = Vector3(1.0f, 1.0f, 1.0f), const Vector3& _specular = 
     std::string& GetName();
 
     void ShowGUIDetails();
+    void AddTexture(Texture* _texture);
 };

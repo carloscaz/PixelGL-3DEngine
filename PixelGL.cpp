@@ -87,22 +87,26 @@ int main(void)
     
     // Shader* basicShader = Shader::Load("Data/Shaders/BasicShader/VertexShader.glsl", "Data/Shaders/BasicShader/FragmentShader.glsl");
     // Shader* texShader = Shader::Load("Data/Shaders/TextureShader/VertexShader.glsl", "Data/Shaders/TextureShader/FragmentShader.glsl");
-    Shader* mvpShader = Shader::Load("Data/Shaders/3DShader/VertexShader.glsl", "Data/Shaders/3DShader/FragmentShader.glsl");
+    Shader* lightSourceShader = Shader::Load("Data/Shaders/LightSourceShader/VertexShader.glsl", "Data/Shaders/LightSourceShader/FragmentShader.glsl");
     Shader* lightShader = Shader::Load("Data/Shaders/LightShader/VertexShader.glsl", "Data/Shaders/LightShader/FragmentShader.glsl");
 
     Buffer* myBuffer = new Buffer(vertices, indices);
 
-    Texture* brickTexture = Texture::Load("Data/Textures/wall.jpg");
+    Texture* brickTextureDiff = Texture::Load("Data/Textures/Box.png");
+    Texture* brickTextureSpec = Texture::Load("Data/Textures/BoxSpecular.png");
+    Texture* brickTextureEmission = Texture::Load("Data/Textures/matrix.jpg");
     std::string brickMaterialName = "Brick Material";
-    Material* brickMaterial = new Material(brickTexture, lightShader, brickMaterialName, Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f));
-
+    Material* brickMaterial = new Material(brickTextureDiff, lightShader, brickMaterialName, Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f));
+    brickMaterial->AddTexture(brickTextureSpec);
+    brickMaterial->AddTexture(brickTextureEmission);
+    
     Texture* woodtexture = Texture::Load("Data/Textures/Wood.png");
     std::string woodMaterialName = "Wood Material";
     Material* woodMaterial = new Material(woodtexture, lightShader, woodMaterialName, Vector3(1.0f, 1.0f, 1.0f));
 
     Texture* lightTexture = Texture::Load("Data/Textures/LightTexture.jpg");
     std::string lightMaterialName = "Light Material";
-    Material* lightMaterial = new Material(lightTexture, mvpShader, lightMaterialName, Vector3(1.0f, 1.0f, 1.0f));
+    Material* lightMaterial = new Material(lightTexture, lightSourceShader, lightMaterialName, Vector3(1.0f, 1.0f, 1.0f));
 
     Entity* cube = new Entity(brickMaterial, "Cube");
     cube->SetBuffer(myBuffer);
@@ -141,7 +145,7 @@ int main(void)
         
         framebuffer->Bind();
         //glViewport(0,0,windowWidth, windowHeight);
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_DEPTH_BUFFER_BIT);
         glClear(GL_COLOR_BUFFER_BIT);
         
