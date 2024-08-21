@@ -17,6 +17,7 @@
 #include "OpenGL/Shaders/Shader.h"
 #include "OpenGL/Textures/Texture.h"
 #include "OpenGL/World/World.h"
+#include "OpenGl/Entities/Camera.h"
 
 int main(void)
 {
@@ -98,14 +99,22 @@ int main(void)
     Shader* mvpShader = Shader::Load("Data/Shaders/3DShader/VertexShader.glsl", "Data/Shaders/3DShader/FragmentShader.glsl");
     Buffer* myBuffer = new Buffer(vertices, indices);
 
-    Texture* tex = Texture::Load("Data/Textures/wall.jpg");
-    Material* mat = new Material(tex, mvpShader);
+    Texture* brickTexture = Texture::Load("Data/Textures/wall.jpg");
+    Material* brickMaterial = new Material(brickTexture, mvpShader);
 
-    Entity* myEntity = new Entity(mat, "Cube1");
+    Texture* woodtexture = Texture::Load("Data/Textures/Wood.png");
+    std::string woodMaterialName = "Wood Material";
+    Material* woodMaterial = new Material(woodtexture, mvpShader, woodMaterialName);
+
+    Entity* myEntity = new Entity(brickMaterial, "Cube1");
     myEntity->SetBuffer(myBuffer);
     World::GetInstance()->AddEntity(myEntity);
 
-    // Entity* myEntity2 = new Entity(mat, "Cube2");
+    Camera* myCamera = new Camera();
+    myCamera->SetPosition(Vector3(0,0,5));
+    World::GetInstance()->SetActiveCamera(myCamera);
+
+    // Entity* myEntity2 = new Entity(woodMaterial, "Cube2");
     // myEntity2->SetBuffer(myBuffer);
     // myEntity2->SetPosition(Vector3(2,0,0));
     // World::GetInstance()->AddEntity(myEntity2);

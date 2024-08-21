@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 
+class Camera;
 class EntitiesListWindow;
 class ObjectDetailsWindow;
 class Entity;
@@ -13,11 +14,16 @@ private:
     World();
     static World* m_instance;
     EntitiesListWindow* m_window;
+
+    Camera* m_activeCamera;
 public:
     static World* GetInstance();
     
     void Draw();
     void AddEntity(Entity* _entity);
+
+    void SetActiveCamera(Camera* _camera);
+    Camera* GetActiveCamera() const;
 
     std::vector<Entity*>& GetEntities();
 };

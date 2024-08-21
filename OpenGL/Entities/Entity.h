@@ -9,7 +9,7 @@ class Buffer;
 
 class Entity
 {
-private:
+protected:
     Material* m_material;
     Vector3 m_position;
     Vector3 m_rotation;
@@ -28,6 +28,7 @@ public:
     Vector3 GetRotation() const;
     Vector3 GetScale() const;
     std::string GetName() const;
+    Material* GetMaterial() const;
 
     void SetPosition(const Vector3& _position);
     void SetRotation(const Vector3& _rotation);

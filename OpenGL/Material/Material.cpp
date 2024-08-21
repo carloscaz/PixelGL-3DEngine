@@ -4,7 +4,11 @@
 
 #include "../Shaders/Shader.h"
 
-Material::Material(Texture* _texture, Shader* _shader) : m_texture(_texture), m_shader(_shader)
+Material::Material(Texture* _texture, Shader* _shader) : m_texture(_texture), m_shader(_shader), m_name("Default Material")
+{
+}
+
+Material::Material(Texture* _texture, Shader* _shader, std::string& _name) : m_texture(_texture), m_shader(_shader), m_name(_name)
 {
 }
 
@@ -18,4 +22,9 @@ void Material::Prepare()
 Shader* Material::GetShader() const
 {
     return m_shader;
+}
+
+std::string& Material::GetName()
+{
+    return m_name;
 }

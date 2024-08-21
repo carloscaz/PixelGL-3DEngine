@@ -50,6 +50,16 @@ void World::AddEntity(Entity* _entity)
     m_entitiesNames.push_back(_entity->GetName().c_str());
 }
 
+void World::SetActiveCamera(Camera* _camera)
+{
+    m_activeCamera = _camera;
+}
+
+Camera* World::GetActiveCamera() const
+{
+    return m_activeCamera;
+}
+
 std::vector<Entity*>& World::GetEntities()
 {
     return m_entities;

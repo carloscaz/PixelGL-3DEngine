@@ -5,8 +5,12 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include "Camera.h"
 #include "../Shaders/Shader.h"
 #include "../GlUtils.h"
+#include "../State/State.h"
+#include "../World/World.h"
 #include "ImGui/imgui.h"
 
 Entity::Entity() : m_material(nullptr), m_position(Vector3()), m_rotation(Vector3()), m_scale(Vector3(1,1,1)), m_name("Entity")
@@ -42,6 +46,11 @@ std::string Entity::GetName() const
     return m_name;
 }
 
+Material* Entity::GetMaterial() const
+{
+    return m_material;
+}
+
 void Entity::SetPosition(const Vector3& _position)
 {
     m_position = _position;
@@ -71,27 +80,8 @@ void Entity::Draw()
 {
     m_material->Prepare();
     
-    float fov = 45.0f;
-    // float rot = 20.0f;
-    // ImGui::Begin("Scene cofig");
-    // ImGui::Text("CameraFov:");
-    // ImGui::SliderFloat("Fov", &fov, 0.0f, 100.0f);
-    // ImGui::Text("Position:");
-    // ImGui::DragFloat3("Position", &m_position.x, 0.05f);
-    // ImGui::Text("Rotation:");
-    // ImGui::DragFloat3("Rotation", &m_rotation.x, 0.2f, 0.0f, 360.0f);
-    // ImGui::Text("Scale:");
-    // ImGui::DragFloat3("Scale", &m_scale.x, 0.2f);
-    // ImGui::End();
+    World::GetInstance()->GetActiveCamera()->Prepare(m_material->GetShader());
     
-    glm::mat4 proj = glm::mat4(1.0f);
-    proj = glm::mat4(1.0f);
-    proj = glm::perspective(glm::radians(fov), (float)windowWidth/(float)windowHeight, 0.1f, 100.0f);
-
-    glm::mat4 m_viewMatrix = glm::mat4(1.0f);
-    m_viewMatrix = lookAt(glm::vec3(0, 0, 5), glm::vec3(0,0,0),
-                         glm::vec3(0, 1, 0));
-
     glm::mat4 m_modelMatrix = glm::mat4(1.0f);
     m_modelMatrix = translate(m_modelMatrix, glm::vec3(m_position.x, m_position.y, m_position.z));
     m_modelMatrix = rotate(m_modelMatrix, glm::radians(m_rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -99,8 +89,8 @@ void Entity::Draw()
     m_modelMatrix = rotate(m_modelMatrix, glm::radians(m_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
     m_modelMatrix = scale(m_modelMatrix, glm::vec3(m_scale.x, m_scale.y, m_scale.z));
 
-    m_material->GetShader()->SetMatrix("projection", proj);
-    m_material->GetShader()->SetMatrix("view", m_viewMatrix);
+    //m_material->GetShader()->SetMatrix("projection", State::GetIntance()->GetProjectionMatrix());
+    //m_material->GetShader()->SetMatrix("view", World::GetInstance()->GetActiveCamera()->GetViewMatrix());
     m_material->GetShader()->SetMatrix("model", m_modelMatrix);
 
     m_buffer->Draw();

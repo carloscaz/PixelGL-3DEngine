@@ -4,7 +4,7 @@
 #include "ImGui/imgui_impl_glfw.h"
 #include "ImGui/imgui_impl_opengl3.h"
 
-int windowWidth = 1000, windowHeight = 840;
+int windowWidth = 1200, windowHeight = 940;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
