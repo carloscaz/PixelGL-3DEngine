@@ -1,10 +1,15 @@
 #include "Camera.h"
 
+#include <iostream>
+#include <ostream>
+
 #include "../../OpenGL/GlUtils.h"
 #include "../../EditorUI/GUIManager/GUIManager.h"
 #include "../Shaders/Shader.h"
 
-Camera::Camera() : m_cameraFov(45.0f)
+Camera::Camera() :
+    m_cameraFov(45.0f),
+    m_cameraSpeed(10.0f)
 {
  
 }
@@ -31,7 +36,7 @@ void Camera::Prepare(Shader* _shader)
     proj = glm::perspective(glm::radians(m_cameraFov), (float)windowWidth/(float)windowHeight, 0.1f, 100.0f);
     
     glm::mat4 m_viewMatrix = glm::mat4(1.0f);
-    m_viewMatrix = lookAt(glm::vec3(m_position.x, m_position.y, m_position.z), glm::vec3(glm::vec3(0,0,0)),
+    m_viewMatrix = lookAt(glm::vec3(m_position.x, m_position.y, m_position.z), glm::vec3(glm::vec3(m_position.x,m_position.y,m_position.z) + cameraFront),
                          glm::vec3(0, 1, 0));
 
     _shader->UseShader();
@@ -46,71 +51,84 @@ float pitch =  0.0f;
 float lastX =  800.0f / 2.0;
 float lastY =  600.0 / 2.0;
 float fov   =  45.0f;
-void Camera::Tick()
+void Camera::Tick(float _deltaTime)
 {
     if(glfwGetMouseButton(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_MOUSE_BUTTON_RIGHT))
     {
+        glfwSetInputMode(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         if(glfwGetKey(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_KEY_W))
         {
-            m_position.z -= ( 0.1f * 0.016f);
+            m_position += (Vector3(cameraFront.x, cameraFront.y, cameraFront.z) * (m_cameraSpeed *_deltaTime));
         }
     
         if(glfwGetKey(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_KEY_S))
         {
-            m_position.z += ( 0.1f * 0.016f);
+            m_position -= (Vector3(cameraFront.x, cameraFront.y, cameraFront.z) * (m_cameraSpeed * _deltaTime));
         }
     
         if(glfwGetKey(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_KEY_A))
         {
-            m_position.x -= ( 0.1f * 0.016f);
+            m_position -= Vector3((glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed * _deltaTime)).x, (glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed * _deltaTime)).y, (glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed *_deltaTime)).z);
         }
     
         if(glfwGetKey(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_KEY_D))
         {
-            m_position.x += ( 0.1f * 0.016f);
+            m_position += Vector3((glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed * _deltaTime)).x, (glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed *_deltaTime)).y, (glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed * _deltaTime)).z);
+
         }
     
         if(glfwGetKey(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_KEY_Q))
         {
-            m_position.y -= ( 0.1f * 0.016f);
+            m_position.y -= (m_cameraSpeed * _deltaTime);
         }
     
         if(glfwGetKey(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_KEY_E))
         {
-            m_position.y += ( 0.1f * 0.016f);
+            m_position.y += ( m_cameraSpeed * _deltaTime);
         }
+
+        double xPos;
+        double yPos;
+        glfwGetCursorPos(GUIManager::GetInstance()->GetGlFWwindow(), &xPos, &yPos);
+        UpdateDirection(xPos, yPos);
+    }
+
+    if (glfwGetMouseButton(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_RELEASE)
+    {
+        firstMouse = true;
+        glfwSetInputMode(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 }
 
 void Camera::UpdateDirection(double xpos, double ypos)
 {
-    // if (firstMouse)
-    // {
-    //     lastX = xpos;
-    //     lastY = ypos;
-    //     firstMouse = false;
-    // }
-    //
-    // float xoffset = xpos - lastX;
-    // float yoffset = lastY - ypos; 
-    // lastX = xpos;
-    // lastY = ypos;
-    //
-    // float sensitivity = 0.1f;
-    // xoffset *= sensitivity;
-    // yoffset *= sensitivity;
-    //
-    // yaw   += xoffset;
-    // pitch += yoffset;
-    //
-    // if(pitch > 89.0f)
-    //     pitch = 89.0f;
-    // if(pitch < -89.0f)
-    //     pitch = -89.0f;
-    //
-    // glm::vec3 direction;
-    // direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    // direction.y = sin(glm::radians(pitch));
-    // direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    // cameraFront = glm::normalize(direction);
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+    
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; 
+    lastX = xpos;
+    lastY = ypos;
+    
+    float sensitivity = 0.1f;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+    
+    yaw   += xoffset;
+    pitch += yoffset;
+    
+    if(pitch > 89.0f)
+        pitch = 89.0f;
+    if(pitch < -89.0f)
+        pitch = -89.0f;
+    
+    glm::vec3 direction;
+    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    direction.y = sin(glm::radians(pitch));
+    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    cameraFront = glm::normalize(direction);
 }  

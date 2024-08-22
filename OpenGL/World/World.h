@@ -52,6 +52,6 @@ public:
     Light* GetLight(unsigned int _index);
     DirectionalLight* GetDirectionaLight() const;
 
-    void Tick();
+    void Tick(float _deltaTime);
     void Draw();
 };

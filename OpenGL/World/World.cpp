@@ -128,7 +128,7 @@ std::vector<SpotLight*>& World::GetSpotLights()
     return m_spotLights;
 }
 
-void World::Tick()
+void World::Tick(float _deltaTime)
 {
-    m_activeCamera->Tick();
+    m_activeCamera->Tick(_deltaTime);
 }

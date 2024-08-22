@@ -1,22 +1,20 @@
-#include "ImGui/imgui.h"
-#include "ImGui/imgui_impl_glfw.h"
-#include "ImGui/imgui_impl_opengl3.h"
-
-#include <glad/glad.h> 
-#include <GLFW/glfw3.h>
 #include <iostream>
 
+#include "Dependencies/include/ImGui/imgui.h"
+#include "Dependencies/include/ImGui/imgui_impl_glfw.h"
+#include "Dependencies/include/ImGui/imgui_impl_opengl3.h"
+#include "Dependencies/include/glad/glad.h"
+#include "Dependencies/include/GLFW/glfw3.h"
 #include "EditorUI/GUIManager/GUIManager.h"
-#include "OpenGL/GlUtils.h"
 
 #include "Math/Vector3/Vector3.h"
+#include "OpenGL/GlUtils.h"
 #include "OpenGL/Buffers/FrameBuffer.h"
 #include "OpenGL/Entities/Entity.h"
 #include "OpenGL/World/World.h"
 #include "OpenGl/Entities/Camera.h"
-#include "OpenGL/Entities/Lights/DirectionalLight.h"
 #include "OpenGL/Material/Material.h"
-#include "OpenGL/Shaders/Shader.h"
+
 
 void CreateSceneDemo()
 {
@@ -37,7 +35,7 @@ int main(void)
     //std::string woodMaterialName = "Wood Material";
     //Material* woodMaterial = new Material(woodtexture, lightShader, woodMaterialName, Vector3(1.0f, 1.0f, 1.0f));
 
-    //CreateSceneDemo();
+    CreateSceneDemo();
     
     Camera* myCamera = new Camera();
     myCamera->SetPosition(Vector3(0,0,3));
@@ -55,11 +53,11 @@ int main(void)
     double lastTime = glfwGetTime();
     while (!glfwWindowShouldClose(window))
     {
-        // get delta time
+        //Get delta time
         float deltaTime = static_cast<float>(glfwGetTime() - lastTime);
         lastTime = glfwGetTime();
         
-        World::GetInstance()->Tick();
+        World::GetInstance()->Tick(deltaTime);
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();

@@ -10,6 +10,7 @@
 #include "ImGui/imgui_impl_glfw.h"
 #include "ImGui/imgui_impl_opengl3.h"
 #include "Material/Material.h"
+#include "Mesh/Mesh.h"
 #include "World/World.h"
 #include "Shaders/Shader.h"
 #include "Textures/Texture.h"
@@ -232,10 +233,12 @@ namespace GLUtils
         Material* lightMaterial = new Material(nullptr, lightSourceShader, lightMaterialName,
                                                Vector3(1.0f, 1.0f, 1.0f));
 
+           Mesh* mesh = new Mesh(lightMaterial, myBuffer);
         std::string lightName = std::string("PointLight" + std::to_string(pointLightIndex));
-        PointLight* pointLight = new PointLight(lightMaterial, lightName);
+           PointLight* pointLight = new PointLight(mesh, lightName);
+        //PointLight* pointLight = new PointLight(lightMaterial, lightName);
         ++pointLightIndex;
-        pointLight->SetBuffer(myBuffer);
+        //pointLight->SetBuffer(myBuffer);
         pointLight->SetPosition(Vector3(0, 1, 0));
         pointLight->SetScale(Vector3(0.2f, 0.2f, 0.2f));
         World::GetInstance()->AddEntity(pointLight);
@@ -428,9 +431,9 @@ namespace GLUtils
 
         Buffer* myBuffer = new Buffer(vertices, indices);
 
-
-        Shader* shader = Shader::Load("Data/Shaders/LightShader/VertexShader.glsl",
-                                      "Data/Shaders/LightShader/FragmentShader.glsl");
+       
+        Shader* shader = Shader::Load("Data/Shaders/3DShader/VertexShader.glsl",
+                                      "Data/Shaders/3DShader/FragmentShader.glsl");
         std::string materialName = "Box Material";
         Material* material = new Material(nullptr, shader, materialName, Vector3(1.0f, 1.0f, 1.0f),
                                           Vector3(1.0f, 1.0f, 1.0f));
@@ -438,9 +441,11 @@ namespace GLUtils
         material->AddTexture(Texture::Load("Data/Textures/BoxSpecular.png"));
         material->AddTexture(Texture::Load("Data/Textures/matrix.jpg"));
 
-        Entity* cube = new Entity(material, "Cube" + std::to_string(cubeIndex));
+           Mesh* mesh = new Mesh(material, myBuffer);
+           Entity* cube = new Entity(mesh, "Cube" + std::to_string(cubeIndex));
+        //Entity* cube = new Entity(material, "Cube" + std::to_string(cubeIndex));
         ++cubeIndex;
-        cube->SetBuffer(myBuffer);
+        //cube->SetBuffer(myBuffer);
         World::GetInstance()->AddEntity(cube);
     }
 }

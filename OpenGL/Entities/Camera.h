@@ -11,6 +11,7 @@ private:
     glm::mat4 m_viewMatrix;
     glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
     float m_cameraFov;
+    float m_cameraSpeed;
 public:
     Camera();
 
@@ -20,7 +21,7 @@ public:
 
     void Prepare(Shader* _shader);
 
-    void Tick();
+    void Tick(float _deltaTime);
     
     void UpdateDirection(double xpos, double ypos);
 };
