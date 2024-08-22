@@ -1,9 +1,11 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "../../Math/Vector3/Vector3.h"
 
+class Mesh;
 class Material;
 class Buffer;
 
@@ -18,11 +20,14 @@ protected:
 
     std::string m_name;
 
+    std::vector<Mesh*> m_meshes;
+
     bool m_GUIActive = false;
 public:
     Entity();
     Entity(Material* _material);
     Entity(Material* _material, const std::string& _name);
+    Entity(Material* _material, const std::string& _name, Mesh* _mesh);
     
     Vector3 GetPosition() const;
     Vector3 GetRotation() const;

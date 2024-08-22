@@ -7,6 +7,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Camera.h"
+#include "../Mesh/Mesh.h"
 #include "../Shaders/Shader.h"
 #include "../World/World.h"
 
@@ -21,6 +22,12 @@ Entity::Entity(Material* _material) : m_material(_material), m_position(Vector3(
 Entity::Entity(Material* _material, const std::string& _name) : Entity(_material)
 {
     m_name = _name;
+}
+
+Entity::Entity(Material* _material, const std::string& _name, Mesh* _mesh) :
+    Entity(_material, _name)
+{
+    m_meshes.push_back(_mesh);
 }
 
 Vector3 Entity::GetPosition() const
@@ -80,12 +87,12 @@ void Entity::ShowGUIDetails()
 
 void Entity::Draw()
 {
-    if(m_material)
-    {
-        m_material->Prepare();
-    }
-    
-    World::GetInstance()->GetActiveCamera()->Prepare(m_material->GetShader());
+    // if(m_material)
+    // {
+    //     m_material->Prepare();
+    // }
+    //
+    // World::GetInstance()->GetActiveCamera()->Prepare(m_material->GetShader());
     
     glm::mat4 m_modelMatrix = glm::mat4(1.0f);
     m_modelMatrix = translate(m_modelMatrix, glm::vec3(m_position.x, m_position.y, m_position.z));
@@ -94,9 +101,14 @@ void Entity::Draw()
     m_modelMatrix = rotate(m_modelMatrix, glm::radians(m_rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
     m_modelMatrix = scale(m_modelMatrix, glm::vec3(m_scale.x, m_scale.y, m_scale.z));
     
-    m_material->GetShader()->SetMatrix("model", m_modelMatrix);
+    // m_material->GetShader()->SetMatrix("model", m_modelMatrix);
+    //
+    // m_buffer->Draw();
 
-    m_buffer->Draw();
+    for(Mesh* mesh : m_meshes)
+    {
+        mesh->Prepare(m_modelMatrix);
+    }
 
 
 }

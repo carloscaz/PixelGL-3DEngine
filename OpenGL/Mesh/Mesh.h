@@ -16,6 +16,6 @@ public:
     Buffer* GetBuffer() const;
 
     void SetModelMatrix(glm::mat4 _matrix);
-    void Prepare(glm::mat4 _matrix);
+    void Prepare(const glm::mat4& _matrix);
     void Draw();
 };
