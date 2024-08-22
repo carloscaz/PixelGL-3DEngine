@@ -9,7 +9,7 @@ DirectionalLight::DirectionalLight(Material* _material)
 Light(_material, "Directional Light"),
 m_direction(Vector3(-0.2f, -1.0f, -0.3f))
 {
-    
+    m_strength = 0.5f;
 }
 
 void DirectionalLight::Prepare()

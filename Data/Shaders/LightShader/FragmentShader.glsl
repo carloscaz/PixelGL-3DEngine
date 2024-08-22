@@ -79,7 +79,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float attenuation = 1.0 / (light.constant + light.linear * distance + 
   			     light.quadratic * (distance * distance));    
     // combine results
-    vec3 ambient  = light.ambient * vec3(texture(material.diffuseMap, fTex));
+    vec3 ambient  = vec3(light.strength) * vec3(texture(material.diffuseMap, fTex));
     vec3 diffuse  = light.diffuse * (diff * vec3(texture(material.diffuseMap, fTex)));
     vec3 specular = light.specular * (spec * vec3(texture(material.specularMap, fTex)));
     ambient  *= attenuation;

@@ -9,8 +9,8 @@ SpotLight::SpotLight(Material* _material, std::string& _name)
     m_linear(0.09f),
     m_quadratic(0.032f),
     m_direction(Vector3(0,-1,0)),
-    m_cutOff(12.5f),
-    m_outerCutOff(17.5f)
+    m_cutOff(25.5f),
+    m_outerCutOff(50.0f)
 {
     m_strength = 1.0f;
 }

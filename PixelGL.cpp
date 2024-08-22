@@ -93,6 +93,8 @@ int main(void)
 
         ImGui::Begin("Performance Window");
         ImGui::Text("DeltaTime: %f", deltaTime);
+        ImGui::Text("Window width: %d", windowWidth);
+        ImGui::Text("Window height: %d", windowHeight);
         ImGui::End();
 
         GUIManager::GetInstance()->Tick();
