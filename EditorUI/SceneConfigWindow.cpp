@@ -36,9 +36,21 @@ void SceneConfigWindow::DrawWindow()
                 {
                     GLUtils::CreateCube();
                 }
-                if(ImGui::MenuItem("Light"))
+                if(ImGui::BeginMenu("Lights"))
                 {
-                    GLUtils::CreateLight();
+                    if(ImGui::MenuItem("Directional Light"))
+                    {
+                        GLUtils::CreateDirectionalLight();
+                    }
+                    if(ImGui::MenuItem("PointLight"))
+                    {
+                        GLUtils::CreatePointLight();
+                    }
+                    if(ImGui::MenuItem("SpotLight"))
+                    {
+                        GLUtils::CreateSpotLight();
+                    }
+                    ImGui::EndMenu();
                 }
                 ImGui::EndMenu();
             }
@@ -55,25 +67,6 @@ void SceneConfigWindow::DrawWindow()
         ImGui::Text("Camera Fov:");
         ImGui::DragFloat("##CameraFov", &m_cameraFov,0.2f, 0.0f, 100.0f);
         World::GetInstance()->GetActiveCamera()->SetCameraFov(m_cameraFov);
-    }
-    
-    if(ImGui::CollapsingHeader("Light Scene Properties"))
-    {
-        if(ImGui::TreeNode("Light Intensity"))
-        {
-            ImGui::DragFloat("##LightIntensity", &m_lightIntensity, 0.01f, 0.0f, 1.0f);
-            World::GetInstance()->SetLightIntensity(m_lightIntensity);
-            ImGui::TreePop();
-        }
-    
-        if(ImGui::TreeNode("Light Color"))
-        {
-            Vector3 lightColor = World::GetInstance()->GetLightColor();
-            ImGui::ColorEdit3("##LigthColor", &lightColor.x);
-            World::GetInstance()->SetLightColor(lightColor);
-            ImGui::TreePop();
-        }
-        
     }
     ImGui::End();
 }

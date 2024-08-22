@@ -10,5 +10,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 namespace GLUtils
 {
     void CreateLight();
+    void CreateDirectionalLight();
+    void CreatePointLight();
+    void CreateSpotLight();
     void CreateCube();
 }

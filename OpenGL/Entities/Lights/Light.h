@@ -1,9 +1,9 @@
 #pragma once
-#include "Entity.h"
+#include "../Entity.h"
 
 class Light : public Entity
 {
-private:
+protected:
     Vector3 m_color;
     Vector3 m_diffuse;
     Vector3 m_specular;
@@ -19,6 +19,6 @@ public:
     Vector3 GetLightSpecular() const;
     float GetLightStrength() const;
 
-    void Prepare();
+    virtual void Prepare();
 };
 

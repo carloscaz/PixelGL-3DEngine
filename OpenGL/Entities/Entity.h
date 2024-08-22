@@ -38,5 +38,5 @@ public:
 
     virtual void ShowGUIDetails();
 
-    void Draw();
+    virtual void Draw();
 };

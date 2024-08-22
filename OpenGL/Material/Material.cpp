@@ -3,7 +3,9 @@
 #include <GL/gl.h>
 
 #include "../Entities/Camera.h"
-#include "../Entities/Light.h"
+#include "../Entities/Lights/DirectionalLight.h"
+#include "../Entities/Lights/PointLight.h"
+#include "../Entities/Lights/SpotLight.h"
 #include "../Shaders/Shader.h"
 #include "../World/World.h"
 #include "ImGui/imgui.h"
@@ -43,20 +45,64 @@ void Material::Prepare()
         glBindTexture(GL_TEXTURE_2D, m_textures[i]->GetId());
     }
 
-    for (Light* light : World::GetInstance()->GetLights())
+    if(World::GetInstance()->GetDirectionaLight())
+    {
+        World::GetInstance()->GetDirectionaLight()->Prepare();
+        m_shader->SetVec3("dirLight.direction", World::GetInstance()->GetDirectionaLight()->GetLightDirection());
+        m_shader->SetVec3("dirLight.color", World::GetInstance()->GetDirectionaLight()->GetLightColor());
+        m_shader->SetVec3("dirLight.diffuse", World::GetInstance()->GetDirectionaLight()->GetLightDiffuse());
+        m_shader->SetVec3("dirLight.specular", World::GetInstance()->GetDirectionaLight()->GetLightSpecular());
+        m_shader->SetFloat("dirLight.strength", World::GetInstance()->GetDirectionaLight()->GetLightStrength());
+    }
+    
+    for (PointLight* light : World::GetInstance()->GetPointLights())
+    {
+        light->Prepare();
+    }
+
+    for(SpotLight* light : World::GetInstance()->GetSpotLights())
     {
         light->Prepare();
     }
     
     //Set lights
-    m_shader->SetFloat("ambientLight", World::GetInstance()->GetlightIntensity());
-    m_shader->SetVec3("light.position", World::GetInstance()->GetLight(0)->GetPosition());
-    m_shader->SetVec3("light.color", World::GetInstance()->GetLight(0)->GetLightColor());
-    m_shader->SetVec3("light.diffuse", World::GetInstance()->GetLight(0)->GetLightDiffuse());
-    m_shader->SetVec3("light.specular", World::GetInstance()->GetLight(0)->GetLightSpecular());
-    m_shader->SetFloat("light.strength", World::GetInstance()->GetLight(0)->GetLightStrength());
-    m_shader->SetVec3("viewPos", World::GetInstance()->GetActiveCamera()->GetPosition());
+    m_shader->SetInt("numPointLights", World::GetInstance()->GetPointLights().size());
+    m_shader->SetInt("numSpotLights", World::GetInstance()->GetSpotLights().size());
 
+    unsigned int pointLightIndex = 0;
+    for(PointLight* light : World::GetInstance()->GetPointLights())
+    {
+        m_shader->SetVec3((std::string("pointLights[") + std::to_string(pointLightIndex) + std::string("].position")).c_str(), light->GetPosition());
+        m_shader->SetVec3((std::string("pointLights[") + std::to_string(pointLightIndex) + std::string("].color")).c_str(), light->GetLightColor());
+        m_shader->SetVec3((std::string("pointLights[") + std::to_string(pointLightIndex) + std::string("].diffuse")).c_str(), light->GetLightDiffuse());
+        m_shader->SetVec3((std::string("pointLights[") + std::to_string(pointLightIndex) + std::string("].specular")).c_str(), light->GetLightSpecular());
+        m_shader->SetFloat((std::string("pointLights[") + std::to_string(pointLightIndex) + std::string("].strength")).c_str(), light->GetLightStrength());
+        m_shader->SetFloat((std::string("pointLights[") + std::to_string(pointLightIndex) + std::string("].constant")).c_str(), light->GetLightConstant());
+        m_shader->SetFloat((std::string("pointLights[") + std::to_string(pointLightIndex) + std::string("].linear")).c_str(), light->GetLightLinear());
+        m_shader->SetFloat((std::string("pointLights[") + std::to_string(pointLightIndex) + std::string("].quadratic")).c_str(), light->GetLightQuadratic());
+        ++pointLightIndex;
+    }
+
+    unsigned int spotLightIndex = 0;
+    for(SpotLight* light : World::GetInstance()->GetSpotLights())
+    {
+        m_shader->SetVec3((std::string("spotLights[") + std::to_string(spotLightIndex) + std::string("].position")).c_str(), light->GetPosition());
+        m_shader->SetVec3((std::string("spotLights[") + std::to_string(spotLightIndex) + std::string("].color")).c_str(), light->GetLightColor());
+        m_shader->SetVec3((std::string("spotLights[") + std::to_string(spotLightIndex) + std::string("].diffuse")).c_str(), light->GetLightDiffuse());
+        m_shader->SetVec3((std::string("spotLights[") + std::to_string(spotLightIndex) + std::string("].specular")).c_str(), light->GetLightSpecular());
+        m_shader->SetFloat((std::string("spotLights[") + std::to_string(spotLightIndex) + std::string("].strength")).c_str(), light->GetLightStrength());
+        m_shader->SetFloat((std::string("spotLights[") + std::to_string(spotLightIndex) + std::string("].constant")).c_str(), light->GetLightConstant());
+        m_shader->SetFloat((std::string("spotLights[") + std::to_string(spotLightIndex) + std::string("].linear")).c_str(), light->GetLightLinear());
+        m_shader->SetFloat((std::string("spotLights[") + std::to_string(spotLightIndex) + std::string("].quadratic")).c_str(), light->GetLightQuadratic());
+        m_shader->SetVec3((std::string("spotLights[") + std::to_string(spotLightIndex) + std::string("].direction")).c_str(), light->GetLightDirection());
+        m_shader->SetFloat((std::string("spotLights[") + std::to_string(spotLightIndex) + std::string("].cutOff")).c_str(), glm::cos(glm::radians(light->GetLightCutOff())));
+        m_shader->SetFloat((std::string("spotLights[") + std::to_string(spotLightIndex) + std::string("].outerCutOff")).c_str(), glm::cos(glm::radians(light->GetOuterLightCutOff())));
+        ++spotLightIndex;
+    }
+    
+    
+    m_shader->SetVec3("viewPos", World::GetInstance()->GetActiveCamera()->GetPosition());
+    
     m_shader->SetVec3("material.color", m_color);
     m_shader->SetVec3("material.diffuse", m_diffuse);
     m_shader->SetVec3("material.specular", m_specular);

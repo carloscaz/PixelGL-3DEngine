@@ -14,7 +14,16 @@
 #include "OpenGL/Entities/Entity.h"
 #include "OpenGL/World/World.h"
 #include "OpenGl/Entities/Camera.h"
+#include "OpenGL/Entities/Lights/DirectionalLight.h"
+#include "OpenGL/Material/Material.h"
+#include "OpenGL/Shaders/Shader.h"
 
+void CreateSceneDemo()
+{
+    GLUtils::CreateCube();
+    GLUtils::CreatePointLight();
+    GLUtils::CreateDirectionalLight();
+}
 int main(void)
 {
     GLFWwindow* window;
@@ -27,8 +36,8 @@ int main(void)
     //Texture* woodtexture = Texture::Load("Data/Textures/Wood.png");
     //std::string woodMaterialName = "Wood Material";
     //Material* woodMaterial = new Material(woodtexture, lightShader, woodMaterialName, Vector3(1.0f, 1.0f, 1.0f));
-    GLUtils::CreateCube();
-    GLUtils::CreateLight();
+
+    //CreateSceneDemo();
     
     Camera* myCamera = new Camera();
     myCamera->SetPosition(Vector3(0,0,3));
@@ -38,11 +47,18 @@ int main(void)
     // myEntity2->SetBuffer(myBuffer);
     // myEntity2->SetPosition(Vector3(2,0,0));
     // World::GetInstance()->AddEntity(myEntity2);
+
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
     
     FrameBuffer* framebuffer = new FrameBuffer(windowWidth, windowHeight);
     
+    double lastTime = glfwGetTime();
     while (!glfwWindowShouldClose(window))
     {
+        // get delta time
+        float deltaTime = static_cast<float>(glfwGetTime() - lastTime);
+        lastTime = glfwGetTime();
+        
         World::GetInstance()->Tick();
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -73,6 +89,10 @@ int main(void)
             );
             ImGui::EndChild();
         }
+        ImGui::End();
+
+        ImGui::Begin("Performance Window");
+        ImGui::Text("DeltaTime: %f", deltaTime);
         ImGui::End();
 
         GUIManager::GetInstance()->Tick();

@@ -3,7 +3,7 @@
 #include "../../EditorUI/EntitiesListWindow.h"
 #include "../Entities/Camera.h"
 #include "../Entities/Entity.h"
-#include "../Entities/Light.h"
+#include "../Entities/Lights/Light.h"
 #include "ImGui/imgui.h"
 
 World* World::m_instance = nullptr;
@@ -11,7 +11,7 @@ static Entity* m_selectedEntity;
 World::World()
 {
     m_window = EntitiesListWindow::GetInstance();
-    m_selectedEntity = nullptr; // Inicializar la entidad seleccionada como nullptr
+    m_selectedEntity = nullptr;
 }
 
 World::~World()
@@ -22,6 +22,7 @@ World::~World()
     }
     m_entities.clear();
     m_lights.clear();
+    m_pointLights.clear();
 }
 
 World* World::GetInstance()
@@ -50,6 +51,21 @@ void World::AddEntity(Entity* _entity)
 void World::AddLight(Light* _light)
 {
     m_lights.push_back(_light);
+}
+
+void World::AddPointLight(PointLight* _light)
+{
+    m_pointLights.push_back(_light);
+}
+
+void World::AddSpotLight(SpotLight* _light)
+{
+    m_spotLights.push_back(_light);
+}
+
+void World::SetDirectionalLight(DirectionalLight* _light)
+{
+    m_directionalLight = _light;
 }
 
 void World::SetActiveCamera(Camera* _camera)
@@ -87,6 +103,11 @@ Light* World::GetLight(unsigned int _index)
     return m_lights[_index];
 }
 
+DirectionalLight* World::GetDirectionaLight() const
+{
+    return m_directionalLight;
+}
+
 std::vector<Entity*>& World::GetEntities()
 {
     return m_entities;
@@ -95,6 +116,16 @@ std::vector<Entity*>& World::GetEntities()
 std::vector<Light*>& World::GetLights()
 {
     return m_lights;
+}
+
+std::vector<PointLight*>& World::GetPointLights()
+{
+    return m_pointLights;
+}
+
+std::vector<SpotLight*>& World::GetSpotLights()
+{
+    return m_spotLights;
 }
 
 void World::Tick()

@@ -3,7 +3,10 @@
 
 #include "Buffers/Buffer.h"
 #include "Entities/Camera.h"
-#include "Entities/Light.h"
+#include "Entities/Lights/DirectionalLight.h"
+#include "Entities/Lights/Light.h"
+#include "Entities/Lights/PointLight.h"
+#include "Entities/Lights/SpotLight.h"
 #include "ImGui/imgui_impl_glfw.h"
 #include "ImGui/imgui_impl_opengl3.h"
 #include "Material/Material.h"
@@ -26,11 +29,12 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 namespace GLUtils
 {
- 
-       static int lightIndex = 0;
+    static int lightIndex = 0;
+    static int pointLightIndex = 0;
+
     void CreateLight()
     {
-           std::vector<Vertex> vertices =
+        std::vector<Vertex> vertices =
         {
             // Cara delantera
             Vertex(Vector3(-0.5f, -0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f),
@@ -111,22 +115,135 @@ namespace GLUtils
 
         Buffer* myBuffer = new Buffer(vertices, indices);
 
-           
-           Shader* lightSourceShader = Shader::Load("Data/Shaders/LightSourceShader/VertexShader.glsl", "Data/Shaders/LightSourceShader/FragmentShader.glsl");
-           std::string lightMaterialName = "Light Material";
-           Material* lightMaterial = new Material(nullptr, lightSourceShader, lightMaterialName, Vector3(1.0f, 1.0f, 1.0f));
 
-           Light* light = new Light(lightMaterial, "Light" + std::to_string(lightIndex));
-           ++lightIndex;
-           light->SetBuffer(myBuffer);
-           light->SetPosition(Vector3(0, 1, 0));
-           light->SetScale(Vector3(0.2f, 0.2f, 0.2f));
-           World::GetInstance()->AddEntity(light);
-           World::GetInstance()->AddLight(light);
+        Shader* lightSourceShader = Shader::Load("Data/Shaders/LightSourceShader/VertexShader.glsl",
+                                                 "Data/Shaders/LightSourceShader/FragmentShader.glsl");
+        std::string lightMaterialName = "Light Material";
+        Material* lightMaterial = new Material(nullptr, lightSourceShader, lightMaterialName,
+                                               Vector3(1.0f, 1.0f, 1.0f));
+
+        Light* light = new Light(lightMaterial, "Light" + std::to_string(lightIndex));
+        ++lightIndex;
+        light->SetBuffer(myBuffer);
+        light->SetPosition(Vector3(0, 1, 0));
+        light->SetScale(Vector3(0.2f, 0.2f, 0.2f));
+        World::GetInstance()->AddEntity(light);
+        World::GetInstance()->AddLight(light);
     }
 
-       static int cubeIndex = 0;
-    void CreateCube()
+    void CreateDirectionalLight()
+    {
+        Shader* shader = Shader::Load("Data/Shaders/LightSourceShader/VertexShader.glsl",
+                                      "Data/Shaders/LightSourceShader/FragmentShader.glsl");
+        std::string materialName = "Light Material";
+        Material* material = new Material(nullptr, shader, materialName, Vector3(1.0f, 1.0f, 1.0f));
+        DirectionalLight* dirLight = new DirectionalLight(material);
+        World::GetInstance()->SetDirectionalLight(dirLight);
+        World::GetInstance()->AddEntity(dirLight);
+    }
+
+    void CreatePointLight()
+    {
+        std::vector<Vertex> vertices =
+        {
+            // Cara delantera
+            Vertex(Vector3(-0.5f, -0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f),
+                   Vector3(0.0f, 0.0f, 1.0f)),
+            Vertex(Vector3(0.5f, -0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f),
+                   Vector3(0.0f, 0.0f, 1.0f)),
+            Vertex(Vector3(0.5f, 0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f),
+                   Vector3(0.0f, 0.0f, 1.0f)),
+            Vertex(Vector3(-0.5f, 0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f),
+                   Vector3(0.0f, 0.0f, 1.0f)),
+
+            // Cara trasera
+            Vertex(Vector3(-0.5f, -0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f),
+                   Vector3(0.0f, 0.0f, -1.0f)),
+            Vertex(Vector3(0.5f, -0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f),
+                   Vector3(0.0f, 0.0f, -1.0f)),
+            Vertex(Vector3(0.5f, 0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f),
+                   Vector3(0.0f, 0.0f, -1.0f)),
+            Vertex(Vector3(-0.5f, 0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f),
+                   Vector3(0.0f, 0.0f, -1.0f)),
+
+            // Cara izquierda
+            Vertex(Vector3(-0.5f, -0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f),
+                   Vector3(-1.0f, 0.0f, 0.0f)),
+            Vertex(Vector3(-0.5f, -0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f),
+                   Vector3(-1.0f, 0.0f, 0.0f)),
+            Vertex(Vector3(-0.5f, 0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f),
+                   Vector3(-1.0f, 0.0f, 0.0f)),
+            Vertex(Vector3(-0.5f, 0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f),
+                   Vector3(-1.0f, 0.0f, 0.0f)),
+
+            // Cara derecha
+            Vertex(Vector3(0.5f, -0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f),
+                   Vector3(1.0f, 0.0f, 0.0f)),
+            Vertex(Vector3(0.5f, -0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f),
+                   Vector3(1.0f, 0.0f, 0.0f)),
+            Vertex(Vector3(0.5f, 0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f),
+                   Vector3(1.0f, 0.0f, 0.0f)),
+            Vertex(Vector3(0.5f, 0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f),
+                   Vector3(1.0f, 0.0f, 0.0f)),
+
+            // Cara superior
+            Vertex(Vector3(-0.5f, 0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f),
+                   Vector3(0.0f, 1.0f, 0.0f)),
+            Vertex(Vector3(0.5f, 0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f),
+                   Vector3(0.0f, 1.0f, 0.0f)),
+            Vertex(Vector3(0.5f, 0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f),
+                   Vector3(0.0f, 1.0f, 0.0f)),
+            Vertex(Vector3(-0.5f, 0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f),
+                   Vector3(0.0f, 1.0f, 0.0f)),
+
+            // Cara inferior
+            Vertex(Vector3(-0.5f, -0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f),
+                   Vector3(0.0f, -1.0f, 0.0f)),
+            Vertex(Vector3(0.5f, -0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f),
+                   Vector3(0.0f, -1.0f, 0.0f)),
+            Vertex(Vector3(0.5f, -0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f),
+                   Vector3(0.0f, -1.0f, 0.0f)),
+            Vertex(Vector3(-0.5f, -0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f),
+                   Vector3(0.0f, -1.0f, 0.0f))
+        };
+
+        std::vector<unsigned int> indices =
+        {
+            // Cara delantera
+            0, 1, 2, 2, 3, 0,
+            // Cara trasera
+            4, 5, 6, 6, 7, 4,
+            // Cara izquierda
+            8, 9, 10, 10, 11, 8,
+            // Cara derecha
+            12, 13, 14, 14, 15, 12,
+            // Cara superior
+            16, 17, 18, 18, 19, 16,
+            // Cara inferior
+            20, 21, 22, 22, 23, 20
+        };
+
+        Buffer* myBuffer = new Buffer(vertices, indices);
+
+
+        Shader* lightSourceShader = Shader::Load("Data/Shaders/LightSourceShader/VertexShader.glsl",
+                                                 "Data/Shaders/LightSourceShader/FragmentShader.glsl");
+        std::string lightMaterialName = "Light Material";
+        Material* lightMaterial = new Material(nullptr, lightSourceShader, lightMaterialName,
+                                               Vector3(1.0f, 1.0f, 1.0f));
+
+        std::string lightName = std::string("PointLight" + std::to_string(pointLightIndex));
+        PointLight* pointLight = new PointLight(lightMaterial, lightName);
+        ++pointLightIndex;
+        pointLight->SetBuffer(myBuffer);
+        pointLight->SetPosition(Vector3(0, 1, 0));
+        pointLight->SetScale(Vector3(0.2f, 0.2f, 0.2f));
+        World::GetInstance()->AddEntity(pointLight);
+        World::GetInstance()->AddPointLight(pointLight);
+    }
+
+       static int spotLightIndex = 0;
+    void CreateSpotLight()
     {
            std::vector<Vertex> vertices =
         {
@@ -209,18 +326,120 @@ namespace GLUtils
 
         Buffer* myBuffer = new Buffer(vertices, indices);
 
-           
+
+        Shader* lightSourceShader = Shader::Load("Data/Shaders/LightSourceShader/VertexShader.glsl",
+                                                 "Data/Shaders/LightSourceShader/FragmentShader.glsl");
+        std::string lightMaterialName = "Light Material";
+        Material* lightMaterial = new Material(nullptr, lightSourceShader, lightMaterialName,
+                                               Vector3(1.0f, 1.0f, 1.0f));
+
+        std::string lightName = std::string("SpotLight" + std::to_string(spotLightIndex));
+        SpotLight* spotLight = new SpotLight(lightMaterial, lightName);
+        ++spotLightIndex;
+        spotLight->SetBuffer(myBuffer);
+        spotLight->SetPosition(Vector3(0, 1, 0));
+        spotLight->SetScale(Vector3(0.2f, 0.2f, 0.2f));
+        World::GetInstance()->AddEntity(spotLight);
+        World::GetInstance()->AddSpotLight(spotLight);
+    }
+
+    static int cubeIndex = 0;
+
+    void CreateCube()
+    {
+        std::vector<Vertex> vertices =
+        {
+            // Cara delantera
+            Vertex(Vector3(-0.5f, -0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f),
+                   Vector3(0.0f, 0.0f, 1.0f)),
+            Vertex(Vector3(0.5f, -0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f),
+                   Vector3(0.0f, 0.0f, 1.0f)),
+            Vertex(Vector3(0.5f, 0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f),
+                   Vector3(0.0f, 0.0f, 1.0f)),
+            Vertex(Vector3(-0.5f, 0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f),
+                   Vector3(0.0f, 0.0f, 1.0f)),
+
+            // Cara trasera
+            Vertex(Vector3(-0.5f, -0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f),
+                   Vector3(0.0f, 0.0f, -1.0f)),
+            Vertex(Vector3(0.5f, -0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f),
+                   Vector3(0.0f, 0.0f, -1.0f)),
+            Vertex(Vector3(0.5f, 0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f),
+                   Vector3(0.0f, 0.0f, -1.0f)),
+            Vertex(Vector3(-0.5f, 0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f),
+                   Vector3(0.0f, 0.0f, -1.0f)),
+
+            // Cara izquierda
+            Vertex(Vector3(-0.5f, -0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f),
+                   Vector3(-1.0f, 0.0f, 0.0f)),
+            Vertex(Vector3(-0.5f, -0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f),
+                   Vector3(-1.0f, 0.0f, 0.0f)),
+            Vertex(Vector3(-0.5f, 0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f),
+                   Vector3(-1.0f, 0.0f, 0.0f)),
+            Vertex(Vector3(-0.5f, 0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f),
+                   Vector3(-1.0f, 0.0f, 0.0f)),
+
+            // Cara derecha
+            Vertex(Vector3(0.5f, -0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f),
+                   Vector3(1.0f, 0.0f, 0.0f)),
+            Vertex(Vector3(0.5f, -0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f),
+                   Vector3(1.0f, 0.0f, 0.0f)),
+            Vertex(Vector3(0.5f, 0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f),
+                   Vector3(1.0f, 0.0f, 0.0f)),
+            Vertex(Vector3(0.5f, 0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f),
+                   Vector3(1.0f, 0.0f, 0.0f)),
+
+            // Cara superior
+            Vertex(Vector3(-0.5f, 0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f),
+                   Vector3(0.0f, 1.0f, 0.0f)),
+            Vertex(Vector3(0.5f, 0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f),
+                   Vector3(0.0f, 1.0f, 0.0f)),
+            Vertex(Vector3(0.5f, 0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f),
+                   Vector3(0.0f, 1.0f, 0.0f)),
+            Vertex(Vector3(-0.5f, 0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f),
+                   Vector3(0.0f, 1.0f, 0.0f)),
+
+            // Cara inferior
+            Vertex(Vector3(-0.5f, -0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 0.0f),
+                   Vector3(0.0f, -1.0f, 0.0f)),
+            Vertex(Vector3(0.5f, -0.5f, -0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 0.0f),
+                   Vector3(0.0f, -1.0f, 0.0f)),
+            Vertex(Vector3(0.5f, -0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(1.0f, 1.0f),
+                   Vector3(0.0f, -1.0f, 0.0f)),
+            Vertex(Vector3(-0.5f, -0.5f, 0.5f), Vector3(0.0f, 0.0f, 0.0f), Vector2(0.0f, 1.0f),
+                   Vector3(0.0f, -1.0f, 0.0f))
+        };
+
+        std::vector<unsigned int> indices =
+        {
+            // Cara delantera
+            0, 1, 2, 2, 3, 0,
+            // Cara trasera
+            4, 5, 6, 6, 7, 4,
+            // Cara izquierda
+            8, 9, 10, 10, 11, 8,
+            // Cara derecha
+            12, 13, 14, 14, 15, 12,
+            // Cara superior
+            16, 17, 18, 18, 19, 16,
+            // Cara inferior
+            20, 21, 22, 22, 23, 20
+        };
+
+        Buffer* myBuffer = new Buffer(vertices, indices);
+
+
         Shader* shader = Shader::Load("Data/Shaders/LightShader/VertexShader.glsl",
-                                           "Data/Shaders/LightShader/FragmentShader.glsl");
+                                      "Data/Shaders/LightShader/FragmentShader.glsl");
         std::string materialName = "Box Material";
         Material* material = new Material(nullptr, shader, materialName, Vector3(1.0f, 1.0f, 1.0f),
-                                               Vector3(1.0f, 1.0f, 1.0f));
+                                          Vector3(1.0f, 1.0f, 1.0f));
         material->AddTexture(Texture::Load("Data/Textures/Box.png"));
         material->AddTexture(Texture::Load("Data/Textures/BoxSpecular.png"));
         material->AddTexture(Texture::Load("Data/Textures/matrix.jpg"));
 
         Entity* cube = new Entity(material, "Cube" + std::to_string(cubeIndex));
-           ++cubeIndex;
+        ++cubeIndex;
         cube->SetBuffer(myBuffer);
         World::GetInstance()->AddEntity(cube);
     }
@@ -294,7 +513,7 @@ bool InitEngine(GLFWwindow*& _window) //Init all engine systems
     io.Fonts->AddFontDefault();
 
     glEnable(GL_DEPTH_TEST); //Enable Depth testing
-    glEnable(GL_SCISSOR_TEST);
+    //glEnable(GL_SCISSOR_TEST);
 
     glfwSetFramebufferSizeCallback(_window, framebuffer_size_callback);
     // glfwSetCursorPosCallback(_window, mouse_callback);  
