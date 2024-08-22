@@ -4,11 +4,11 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <glad/glad.h>
+#include "../../Dependencies/include/glad/glad.h"
 
 #include "../../Math/Vector3/Vector3.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "../../Dependencies/include/glm/glm.hpp"
+#include "../../Dependencies/include/glm/gtc/type_ptr.hpp"
 
 
 Shader::Shader()

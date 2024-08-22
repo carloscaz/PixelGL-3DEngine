@@ -489,8 +489,10 @@
     <ClCompile Include="PixelGL.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Dependencies\include\glad\glad.h" />
     <ClInclude Include="Dependencies\include\GLFW\glfw3.h" />
     <ClInclude Include="Dependencies\include\GLFW\glfw3native.h" />
+    <ClInclude Include="Dependencies\include\glm\glm.hpp" />
     <ClInclude Include="Dependencies\include\ImGui\imconfig.h" />
     <ClInclude Include="Dependencies\include\ImGui\imgui.h" />
     <ClInclude Include="Dependencies\include\ImGui\imgui_impl_glfw.h" />

@@ -1,5 +1,5 @@
 #pragma once
-#include "GLFW/glfw3.h"
+#include "../../Dependencies/include/GLFW/glfw3.h"
 
 class SceneConfigWindow;
 class ObjectDetailsWindow;

@@ -1,5 +1,5 @@
 #pragma once
-#include <glm/detail/type_mat.hpp>
+#include "../../Dependencies/include/glm/glm.hpp"
 
 class Vector3;
 
