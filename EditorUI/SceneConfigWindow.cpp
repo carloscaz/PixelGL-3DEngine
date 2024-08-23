@@ -29,7 +29,7 @@ void SceneConfigWindow::DrawWindow()
     {
         if (ImGui::BeginMenu("Menu"))
         {
-            if(ImGui::BeginMenu("New entity"))
+            if(ImGui::BeginMenu("Create new entity"))
             {
                 ImGui::SeparatorText("Entities list");
                 if(ImGui::MenuItem("Cube"))
@@ -52,7 +52,12 @@ void SceneConfigWindow::DrawWindow()
                     }
                     ImGui::EndMenu();
                 }
+                if(ImGui::MenuItem("Mesh"))
+                {
+                    GLUtils::CreateDemoMesh();
+                }
                 ImGui::EndMenu();
+
             }
             if(ImGui::MenuItem("Close engine"))
             {

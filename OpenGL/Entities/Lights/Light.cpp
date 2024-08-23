@@ -55,5 +55,5 @@ float Light::GetLightStrength() const
 
 void Light::Prepare()
 {
-    m_material->GetShader()->SetVec3("color", m_diffuse);
+    
 }

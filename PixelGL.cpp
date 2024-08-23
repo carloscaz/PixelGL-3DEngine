@@ -14,12 +14,13 @@
 #include "OpenGL/World/World.h"
 #include "OpenGl/Entities/Camera.h"
 #include "OpenGL/Material/Material.h"
+#include "OpenGL/Mesh/Mesh.h"
 
 
 void CreateSceneDemo()
 {
-    GLUtils::CreateCube();
-    GLUtils::CreatePointLight();
+    //GLUtils::CreateCube();
+    //GLUtils::CreatePointLight();
     GLUtils::CreateDirectionalLight();
 }
 int main(void)
@@ -46,6 +47,8 @@ int main(void)
     // myEntity2->SetPosition(Vector3(2,0,0));
     // World::GetInstance()->AddEntity(myEntity2);
 
+    
+    
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     
     FrameBuffer* framebuffer = new FrameBuffer(windowWidth, windowHeight);

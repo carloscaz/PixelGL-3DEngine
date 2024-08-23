@@ -10,12 +10,13 @@
 #include "../Mesh/Mesh.h"
 #include "../Shaders/Shader.h"
 #include "../World/World.h"
+#include "ImGui/imgui.h"
 
-Entity::Entity() : m_material(nullptr), m_position(Vector3()), m_rotation(Vector3()), m_scale(Vector3(1,1,1)), m_name("Entity")
+Entity::Entity() : m_position(Vector3()), m_rotation(Vector3()), m_scale(Vector3(1,1,1)), m_name("Entity")
 {
 }
 
-Entity::Entity(Material* _material) : m_material(_material), m_position(Vector3()), m_rotation(Vector3()), m_scale(Vector3(1,1,1)), m_name("Entity")
+Entity::Entity(Material* _material) : m_position(Vector3()), m_rotation(Vector3()), m_scale(Vector3(1,1,1)), m_name("Entity")
 {
 }
 
@@ -24,10 +25,16 @@ Entity::Entity(Material* _material, const std::string& _name) : Entity(_material
     m_name = _name;
 }
 
-Entity::Entity(Material* _material, const std::string& _name, Mesh* _mesh) :
-    Entity(_material, _name)
+Entity::Entity(const std::string& _name, Mesh* _mesh) :
+    Entity(nullptr, _name)
 {
     m_meshes.push_back(_mesh);
+}
+
+Entity::Entity(const std::string& _name, const std::vector<Mesh*>& _meshes) :
+    Entity(nullptr, _name)
+{
+    m_meshes = _meshes;
 }
 
 Vector3 Entity::GetPosition() const
@@ -50,11 +57,6 @@ std::string Entity::GetName() const
     return m_name;
 }
 
-Material* Entity::GetMaterial() const
-{
-    return m_material;
-}
-
 void Entity::SetPosition(const Vector3& _position)
 {
     m_position = _position;
@@ -70,10 +72,6 @@ void Entity::SetScale(const Vector3& _scale)
     m_scale = _scale;
 }
 
-void Entity::SetBuffer(Buffer* buffer)
-{
-    m_buffer = buffer;
-}
 
 void Entity::SetGuiActtive(bool _value)
 {
@@ -82,7 +80,20 @@ void Entity::SetGuiActtive(bool _value)
 
 void Entity::ShowGUIDetails()
 {
-    m_material->ShowGUIDetails();
+    int meshIndex = 0;
+    if (ImGui::CollapsingHeader("Object Meshes"))
+    {
+        for(Mesh* mesh : m_meshes)
+        {
+            if (ImGui::CollapsingHeader(std::string(("Mesh ") + std::to_string(meshIndex)).c_str()))
+            {
+                //mesh->GetMaterial()->ShowGUIDetails();
+            }
+            ++meshIndex;
+            
+        }
+    }
+
 }
 
 void Entity::Draw()
@@ -109,6 +120,5 @@ void Entity::Draw()
     {
         mesh->Prepare(m_modelMatrix);
     }
-
-
+    
 }

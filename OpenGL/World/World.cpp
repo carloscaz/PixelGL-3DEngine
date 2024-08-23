@@ -3,7 +3,8 @@
 #include "../../EditorUI/EntitiesListWindow.h"
 #include "../Entities/Camera.h"
 #include "../Entities/Entity.h"
-#include "../Entities/Lights/Light.h"
+#include "../Entities/Lights/PointLight.h"
+#include "../Entities/Lights/SpotLight.h"
 #include "ImGui/imgui.h"
 
 World* World::m_instance = nullptr;
@@ -36,6 +37,16 @@ World* World::GetInstance()
 
 void World::Draw()
 {
+    for (PointLight* pointLight : m_pointLights)
+    {
+        pointLight->Prepare();
+    }
+
+    for (SpotLight* spotLight : m_spotLights)
+    {
+        spotLight->Prepare();
+    }
+    
     for (Entity* entity : m_entities)
     {
         entity->Draw();

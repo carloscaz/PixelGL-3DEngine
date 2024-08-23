@@ -55,6 +55,7 @@ Texture* Texture::Load(const char* _filename)
     else
     {
         std::cout << "Texture not found" << std::endl;
+        return nullptr;
     }
 
     stbi_image_free(data);

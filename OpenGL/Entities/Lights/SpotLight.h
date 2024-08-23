@@ -12,6 +12,7 @@ private:
     float m_outerCutOff;
 public:
     SpotLight(Material* _material, std::string& _name);
+    SpotLight(std::string& _name, Mesh* _mesh);
 
     Vector3 GetLightDirection();
     float GetLightCutOff();
@@ -19,6 +20,7 @@ public:
     float GetLightConstant();
     float GetLightLinear();
     float GetLightQuadratic();
+    void Prepare() override;
 
     void ShowGUIDetails() override;
 };

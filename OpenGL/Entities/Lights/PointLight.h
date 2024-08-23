@@ -9,7 +9,7 @@ private:
     float m_quadratic;
 public:
     PointLight(Material* _material, std::string& _name);
-    PointLight(Material* _material, std::string& _name, Mesh* _mesh);
+    PointLight(std::string& _name, Mesh* _mesh);
 
     float GetLightConstant();
     float GetLightLinear();

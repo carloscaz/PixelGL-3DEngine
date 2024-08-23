@@ -2,6 +2,10 @@
 #include "../include/glm/glm.hpp"
 #include "ImGui/imgui.h"
 
+#include "../../Material/Material.h"
+#include "../../Mesh/Mesh.h"
+#include "../../Shaders/Shader.h"
+
 SpotLight::SpotLight(Material* _material, std::string& _name)
     :
     Light(_material, _name),
@@ -13,6 +17,19 @@ SpotLight::SpotLight(Material* _material, std::string& _name)
     m_outerCutOff(50.0f)
 {
     m_strength = 1.0f;
+}
+
+SpotLight::SpotLight(std::string& _name, Mesh* _mesh) :
+    Light(nullptr, _name),
+    m_constant(1.0f),
+    m_linear(0.09f),
+    m_quadratic(0.032f),
+    m_direction(Vector3(0,-1,0)),
+    m_cutOff(25.5f),
+    m_outerCutOff(50.0f)
+{
+    m_strength = 1.0f;
+    m_meshes.push_back(_mesh);
 }
 
 Vector3 SpotLight::GetLightDirection()
@@ -43,6 +60,15 @@ float SpotLight::GetLightLinear()
 float SpotLight::GetLightQuadratic()
 {
     return m_quadratic;
+}
+
+void SpotLight::Prepare()
+{
+    //Light::Prepare();
+    for (Mesh* mesh : m_meshes)
+    {
+        mesh->GetMaterial()->GetShader()->SetVec3("color", m_diffuse);
+    }
 }
 
 void SpotLight::ShowGUIDetails()

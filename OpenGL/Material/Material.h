@@ -24,7 +24,7 @@ private:
 public:
     Material(Texture* _texture, Shader* _shader);
     Material(Texture* _texture, Shader* _shader, std::string& _name);
-    Material(Texture* _texture, Shader* _shader, std::string& _name, const Vector3& _color = Vector3(1.0f, 1.0f, 1.0f),
+    Material(Shader* _shader, std::string& _name, const Vector3& _color = Vector3(1.0f, 1.0f, 1.0f),
 const Vector3& _diffuse = Vector3(1.0f, 1.0f, 1.0f), const Vector3& _specular = Vector3(0.5f, 0.5f, 0.5f), float _shininess = 32.0f);
     void Prepare();
 

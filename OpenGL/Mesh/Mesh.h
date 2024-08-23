@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include <glm/detail/type_mat.hpp>
 
 class Buffer;
@@ -11,6 +12,8 @@ private:
     Buffer* m_buffer;
 public:
     Mesh(Material* _material, Buffer* _buffer);
+    static std::vector<Mesh*> Load(const char* _filename);
+    //static std::vector<Mesh*> Load(const char* _filename);
 
     Material* GetMaterial() const;
     Buffer* GetBuffer() const;

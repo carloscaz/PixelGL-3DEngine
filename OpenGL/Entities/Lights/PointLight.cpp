@@ -16,9 +16,9 @@ PointLight::PointLight(Material* _material, std::string& _name)
     m_quadratic(0.032f)
 {}
 
-PointLight::PointLight(Material* _material, std::string& _name, Mesh* _mesh)
+PointLight::PointLight(std::string& _name, Mesh* _mesh)
 :
-    Light(_material, _name),
+    Light(nullptr, _name),
     m_constant(1.0f),
     m_linear(0.09f),
     m_quadratic(0.032f)

@@ -20,7 +20,7 @@ Material::Material(Texture* _texture, Shader* _shader, std::string& _name) : m_s
     m_textures.push_back(_texture);
 }
 
-Material::Material(Texture* _texture, Shader* _shader, std::string& _name, const Vector3& _color,
+Material::Material(Shader* _shader, std::string& _name, const Vector3& _color,
                    const Vector3& _diffuse, const Vector3& _specular, float _shininess)
     : m_shader(_shader),
       m_name(_name),
@@ -28,10 +28,7 @@ Material::Material(Texture* _texture, Shader* _shader, std::string& _name, const
       m_diffuse(_diffuse),
       m_specular(_specular),
       m_shininess(_shininess)
-{
-    if(_texture)
-    m_textures.push_back(_texture);
-}
+{}
 
 void Material::Prepare()
 {
@@ -55,15 +52,15 @@ void Material::Prepare()
         m_shader->SetFloat("dirLight.strength", World::GetInstance()->GetDirectionaLight()->GetLightStrength());
     }
     
-    for (PointLight* light : World::GetInstance()->GetPointLights())
-    {
-        light->Prepare();
-    }
+    // for (PointLight* light : World::GetInstance()->GetPointLights())
+    // {
+    //     light->Prepare();
+    // }
 
-    for(SpotLight* light : World::GetInstance()->GetSpotLights())
-    {
-        light->Prepare();
-    }
+    // for(SpotLight* light : World::GetInstance()->GetSpotLights())
+    // {
+    //     light->Prepare();
+    // }
     
     //Set lights
     m_shader->SetInt("numPointLights", World::GetInstance()->GetPointLights().size());

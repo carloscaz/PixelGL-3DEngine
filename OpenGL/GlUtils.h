@@ -14,4 +14,5 @@ namespace GLUtils
     void CreatePointLight();
     void CreateSpotLight();
     void CreateCube();
+    void CreateDemoMesh();
 }

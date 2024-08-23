@@ -14,7 +14,7 @@ m_direction(Vector3(-0.2f, -1.0f, -0.3f))
 
 void DirectionalLight::Prepare()
 {
-    Light::Prepare();
+    // m_material->GetShader()->SetVec3("color", m_diffuse);
 }
 
 Vector3 DirectionalLight::GetLightDirection() const
