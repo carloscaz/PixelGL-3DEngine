@@ -3,6 +3,9 @@
 #include <iostream>
 #include <ostream>
 
+#include "../../Material/Material.h"
+#include "../../Mesh/Mesh.h"
+#include "../../Shaders/Shader.h"
 #include "ImGui/imgui.h"
 
 PointLight::PointLight(Material* _material, std::string& _name)
@@ -40,7 +43,11 @@ float PointLight::GetLightQuadratic()
 
 void PointLight::Prepare()
 {
-    Light::Prepare();
+    //Light::Prepare();
+    for (Mesh* mesh : m_meshes)
+    {
+        mesh->GetMaterial()->GetShader()->SetVec3("color", m_diffuse);
+    }
 }
 
 void PointLight::ShowGUIDetails()

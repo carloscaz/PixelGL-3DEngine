@@ -236,7 +236,7 @@ namespace GLUtils
            Mesh* mesh = new Mesh(lightMaterial, myBuffer);
         std::string lightName = std::string("PointLight" + std::to_string(pointLightIndex));
            //PointLight* pointLight = new PointLight(mesh, lightName);
-        PointLight* pointLight = new PointLight(lightMaterial, lightName, mesh);
+        PointLight* pointLight = new PointLight(nullptr, lightName, mesh);
         ++pointLightIndex;
         pointLight->SetBuffer(myBuffer);
         pointLight->SetPosition(Vector3(0, 1, 0));
@@ -443,7 +443,7 @@ namespace GLUtils
 
            Mesh* mesh = new Mesh(material, myBuffer);
            //Entity* cube = new Entity(mesh, "Cube" + std::to_string(cubeIndex));
-        Entity* cube = new Entity(material, "Cube" + std::to_string(cubeIndex), mesh);
+        Entity* cube = new Entity(nullptr, "Cube" + std::to_string(cubeIndex), mesh);
         ++cubeIndex;
         cube->SetBuffer(myBuffer);
         World::GetInstance()->AddEntity(cube);
