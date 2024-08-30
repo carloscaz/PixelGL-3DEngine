@@ -170,6 +170,7 @@
     <ClCompile Include="EditorUI\EntitiesListWindow.cpp" />
     <ClCompile Include="EditorUI\GUIManager\GUIManager.cpp" />
     <ClCompile Include="EditorUI\GUIWindow.cpp" />
+    <ClCompile Include="EditorUI\LogsWindow.cpp" />
     <ClCompile Include="EditorUI\ObjectDetailsWindow.cpp" />
     <ClCompile Include="EditorUI\SceneConfigWindow.cpp" />
     <ClCompile Include="glad.c" />
@@ -251,6 +252,9 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="OpenGL\Buffers\FrameBuffer.cpp" />
+    <ClCompile Include="OpenGL\Components\Component.cpp" />
+    <ClCompile Include="OpenGL\Components\Physics\PhysicComponent.cpp" />
+    <ClCompile Include="OpenGL\Components\TransformComponent.cpp" />
     <ClCompile Include="OpenGL\Entities\Camera.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -407,6 +411,7 @@
     <ClCompile Include="OpenGL\Entities\Lights\SpotLight.cpp" />
     <ClCompile Include="OpenGL\GLUtils.cpp" />
     <ClCompile Include="OpenGL\Material\Material.cpp" />
+    <ClCompile Include="OpenGL\Material\SkyboxMaterial.cpp" />
     <ClCompile Include="OpenGL\Mesh\Mesh.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -557,6 +562,7 @@
       <AdditionalIncludeDirectories>C:\Users\Carlos\Documents\GitHub\OpenGl\Engine\PixelGL\\Dependencies\include;</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="OpenGL\Skybox\Skybox.cpp" />
     <ClCompile Include="OpenGL\State\State.cpp" />
     <ClCompile Include="OpenGL\Textures\Texture.cpp" />
     <ClCompile Include="OpenGL\Vertex\Vertex.cpp" />
@@ -579,12 +585,16 @@
     <ClInclude Include="EditorUI\EntitiesListWindow.h" />
     <ClInclude Include="EditorUI\GUIManager\GUIManager.h" />
     <ClInclude Include="EditorUI\GUIWindow.h" />
+    <ClInclude Include="EditorUI\LogsWindow.h" />
     <ClInclude Include="EditorUI\ObjectDetailsWindow.h" />
     <ClInclude Include="EditorUI\SceneConfigWindow.h" />
     <ClInclude Include="Math\Vector2\Vector2.h" />
     <ClInclude Include="Math\Vector3\Vector3.h" />
     <ClInclude Include="OpenGL\Buffers\Buffer.h" />
     <ClInclude Include="OpenGL\Buffers\FrameBuffer.h" />
+    <ClInclude Include="OpenGL\Components\Component.h" />
+    <ClInclude Include="OpenGL\Components\Physics\PhysicComponent.h" />
+    <ClInclude Include="OpenGL\Components\TransformComponent.h" />
     <ClInclude Include="OpenGL\Entities\Camera.h" />
     <ClInclude Include="OpenGL\Entities\Entity.h" />
     <ClInclude Include="OpenGL\Entities\Lights\DirectionalLight.h" />
@@ -593,8 +603,10 @@
     <ClInclude Include="OpenGL\Entities\Lights\SpotLight.h" />
     <ClInclude Include="OpenGL\GlUtils.h" />
     <ClInclude Include="OpenGL\Material\Material.h" />
+    <ClInclude Include="OpenGL\Material\SkyboxMaterial.h" />
     <ClInclude Include="OpenGL\Mesh\Mesh.h" />
     <ClInclude Include="OpenGL\Shaders\Shader.h" />
+    <ClInclude Include="OpenGL\Skybox\Skybox.h" />
     <ClInclude Include="OpenGL\State\State.h" />
     <ClInclude Include="OpenGL\Textures\Texture.h" />
     <ClInclude Include="OpenGL\Vertex\Vertex.h" />
@@ -614,6 +626,8 @@
     <Content Include="Data\Shaders\LightSourceShader\VertexShader.glsl" />
     <Content Include="Data\Shaders\SceneShader\FragmentShader.glsl" />
     <Content Include="Data\Shaders\SceneShader\VertexShader.glsl" />
+    <Content Include="Data\Shaders\SkyboxShader\FragmentShader.glsl" />
+    <Content Include="Data\Shaders\SkyboxShader\VertexShader.glsl" />
     <Content Include="Data\Shaders\TextureShader\FragmentShader.glsl" />
     <Content Include="Data\Shaders\TextureShader\VertexShader.glsl" />
   </ItemGroup>

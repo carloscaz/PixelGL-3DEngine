@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "Buffers/Buffer.h"
+#include "Components/TransformComponent.h"
 #include "Entities/Camera.h"
 #include "Entities/Lights/DirectionalLight.h"
 #include "Entities/Lights/Light.h"
@@ -16,7 +17,7 @@
 #include "Textures/Texture.h"
 #include "Vertex/Vertex.h"
 
-int windowWidth = 1920, windowHeight = 1080;
+int windowWidth = 1920, windowHeight = 1009;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -185,6 +186,7 @@ namespace GLUtils
            Mesh* mesh = new Mesh(material, myBuffer);
         Entity* cube = new Entity("Cube" + std::to_string(cubeIndex), mesh);
         ++cubeIndex;
+           cube->SetIsSelectable(true);
         World::GetInstance()->AddEntity(cube);
     }
 
@@ -194,9 +196,10 @@ namespace GLUtils
            std::string name = "Data/Models/gunslinger.obj";
            int init = name.find_last_of("/");
            int end = name.find_first_of(".");
-           Entity* test = new Entity(name.substr(init + 1, end - init - 1), meshes);
-           test->SetScale(Vector3(0.05f,0.05f,0.05f));
-           World::GetInstance()->AddEntity(test);
+           Entity* mesh = new Entity(name.substr(init + 1, end - init - 1), meshes);
+           mesh->SetIsSelectable(true);
+           mesh->GetComponent<TransformComponent>()->SetScale(Vector3(0.05f, 0.05f, 0.05f));
+           World::GetInstance()->AddEntity(mesh);
     }
 }
 

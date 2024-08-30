@@ -10,8 +10,6 @@ protected:
     float m_strength;
 public:
     Light(Material* _material, const std::string& _name);
-    void SetScale(const Vector3& _scale) override{};
-    void SetRotation(const Vector3& _rotation) override{};
     void ShowGUIDetails() override;
 
     Vector3 GetLightColor() const;

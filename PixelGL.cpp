@@ -14,7 +14,10 @@
 #include "OpenGL/World/World.h"
 #include "OpenGl/Entities/Camera.h"
 #include "OpenGL/Material/Material.h"
+#include "OpenGL/Material/SkyboxMaterial.h"
 #include "OpenGL/Mesh/Mesh.h"
+#include "OpenGL/Shaders/Shader.h"
+#include "OpenGL/Skybox/Skybox.h"
 
 
 void CreateSceneDemo()
@@ -37,6 +40,24 @@ int main(void)
     //Material* woodMaterial = new Material(woodtexture, lightShader, woodMaterialName, Vector3(1.0f, 1.0f, 1.0f));
 
     CreateSceneDemo();
+
+    Shader* skyShader = Shader::Load("Data/Shaders/SkyboxShader/VertexShader.glsl",
+                                      "Data/Shaders/SkyboxShader/FragmentShader.glsl");
+
+    std::vector<std::string> faces
+    {
+        "Data/Textures/right.jpg",
+        "Data/Textures/left.jpg",
+        "Data/Textures/top.jpg",
+        "Data/Textures/bottom.jpg",
+        "Data/Textures/front.jpg",
+        "Data/Textures/back.jpg"
+    };
+    Texture* cubemapTex = Texture::LoadCubeMap(faces);
+    SkyboxMaterial* skyMat = new SkyboxMaterial(cubemapTex, skyShader);
+
+    Skybox* sky = new Skybox(skyMat);
+    World::GetInstance()->SetSkybox(sky);
     
     Camera* myCamera = new Camera();
     myCamera->SetPosition(Vector3(0,0,3));

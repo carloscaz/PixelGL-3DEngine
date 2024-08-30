@@ -13,24 +13,30 @@ Light::Light(Material* _material, const std::string& _name)
     m_strength(0.1f)
 {
     m_scale = Vector3(0.2f, 0.2f, 0.2f);
+    m_isSelectable = true;
 }
 
 void Light::ShowGUIDetails()
 {
-    if (ImGui::CollapsingHeader("Light Properties"))
+    for(Component* component : m_components)
     {
-        ImGui::Text("Light color");
-        ImGui::ColorEdit3("##Light color", &m_color.x);
-        ImGui::Spacing();
-        ImGui::Text("Light diffuse");
-        ImGui::DragFloat3("##Light diffuse", &m_diffuse.x, 0.01f, 0, 1);
-        ImGui::Spacing();
-        ImGui::Text("Light specular");
-        ImGui::DragFloat3("##Light specular", &m_specular.x, 0.01f, 0, 1);
-        ImGui::Spacing();
-        ImGui::Text("Light strength");
-        ImGui::DragFloat("##Light strength", &m_strength, 0.01f, 0, 10);
+        component->ShowGuiDetails();
     }
+    
+    // if (ImGui::CollapsingHeader("Light Properties"))
+    // {
+    //     ImGui::Text("Light color");
+    //     ImGui::ColorEdit3("##Light color", &m_color.x);
+    //     ImGui::Spacing();
+    //     ImGui::Text("Light diffuse");
+    //     ImGui::DragFloat3("##Light diffuse", &m_diffuse.x, 0.01f, 0, 1);
+    //     ImGui::Spacing();
+    //     ImGui::Text("Light specular");
+    //     ImGui::DragFloat3("##Light specular", &m_specular.x, 0.01f, 0, 1);
+    //     ImGui::Spacing();
+    //     ImGui::Text("Light strength");
+    //     ImGui::DragFloat("##Light strength", &m_strength, 0.01f, 0, 10);
+    // }
 }
 
 Vector3 Light::GetLightColor() const

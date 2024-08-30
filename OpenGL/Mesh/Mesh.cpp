@@ -36,7 +36,7 @@ std::vector<Mesh*> Mesh::Load(const char* _filename)
     unsigned int materialIndex = 0;
     for (const auto& shape : shapes) {
         Shader* shader = Shader::Load("Data/Shaders/LightShader/VertexShader.glsl", "Data/Shaders/LightShader/FragmentShader.glsl");
-        std::string materialName = std::string(strrchr(_filename, '/') + 1) + " Material";
+        std::string materialName = std::string(materials[materialIndex].name + " Material");
         Material* material = new Material(shader, materialName, Vector3(1.0f, 1.0f, 1.0f),
                                           Vector3(1.0f, 1.0f, 1.0f));
 

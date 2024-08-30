@@ -16,6 +16,8 @@ public:
     Camera();
 
     glm::mat4 GetViewMatrix() const;
+    glm::vec3 GetCameraFront() const;
+    
     void SetViewMatrix(const glm::mat4& _matrix);
     void SetCameraFov(float _fov);
 

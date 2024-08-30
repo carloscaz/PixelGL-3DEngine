@@ -5,6 +5,7 @@
 
 #include "../../OpenGL/GlUtils.h"
 #include "../../EditorUI/GUIManager/GUIManager.h"
+#include "../Components/TransformComponent.h"
 #include "../Shaders/Shader.h"
 
 Camera::Camera() :
@@ -17,6 +18,11 @@ Camera::Camera() :
 glm::mat4 Camera::GetViewMatrix() const
 {
     return m_viewMatrix;
+}
+
+glm::vec3 Camera::GetCameraFront() const
+{
+    return cameraFront;
 }
 
 void Camera::SetViewMatrix(const glm::mat4& _matrix)
@@ -36,7 +42,8 @@ void Camera::Prepare(Shader* _shader)
     proj = glm::perspective(glm::radians(m_cameraFov), (float)windowWidth/(float)windowHeight, 0.1f, 100.0f);
     
     glm::mat4 m_viewMatrix = glm::mat4(1.0f);
-    m_viewMatrix = lookAt(glm::vec3(m_position.x, m_position.y, m_position.z), glm::vec3(glm::vec3(m_position.x,m_position.y,m_position.z) + cameraFront),
+    Vector3 camPos = GetComponent<TransformComponent>()->GetPosition();
+    m_viewMatrix = lookAt(glm::vec3(camPos.x, camPos.y, camPos.z), glm::vec3(glm::vec3(camPos.x,camPos.y,camPos.z) + cameraFront),
                          glm::vec3(0, 1, 0));
 
     _shader->UseShader();
@@ -52,40 +59,42 @@ float lastX =  800.0f / 2.0;
 float lastY =  600.0 / 2.0;
 float fov   =  45.0f;
 void Camera::Tick(float _deltaTime)
-{
+{   Vector3 camPos = GetComponent<TransformComponent>()->GetPosition();
     if(glfwGetMouseButton(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_MOUSE_BUTTON_RIGHT))
     {
         glfwSetInputMode(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         if(glfwGetKey(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_KEY_W))
         {
-            m_position += (Vector3(cameraFront.x, cameraFront.y, cameraFront.z) * (m_cameraSpeed *_deltaTime));
+            camPos += (Vector3(cameraFront.x, cameraFront.y, cameraFront.z) * (m_cameraSpeed *_deltaTime));
         }
     
         if(glfwGetKey(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_KEY_S))
         {
-            m_position -= (Vector3(cameraFront.x, cameraFront.y, cameraFront.z) * (m_cameraSpeed * _deltaTime));
+            camPos -= (Vector3(cameraFront.x, cameraFront.y, cameraFront.z) * (m_cameraSpeed * _deltaTime));
         }
     
         if(glfwGetKey(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_KEY_A))
         {
-            m_position -= Vector3((glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed * _deltaTime)).x, (glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed * _deltaTime)).y, (glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed *_deltaTime)).z);
+            camPos -= Vector3((glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed * _deltaTime)).x, (glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed * _deltaTime)).y, (glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed *_deltaTime)).z);
         }
     
         if(glfwGetKey(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_KEY_D))
         {
-            m_position += Vector3((glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed * _deltaTime)).x, (glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed *_deltaTime)).y, (glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed * _deltaTime)).z);
-
+            camPos += Vector3((glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed * _deltaTime)).x, (glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed *_deltaTime)).y, (glm::normalize(glm::cross(cameraFront, glm::vec3(0,1,0))) * (m_cameraSpeed * _deltaTime)).z);
         }
     
         if(glfwGetKey(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_KEY_Q))
         {
-            m_position.y -= (m_cameraSpeed * _deltaTime);
+            camPos.y -= (m_cameraSpeed * _deltaTime);
         }
     
         if(glfwGetKey(GUIManager::GetInstance()->GetGlFWwindow(), GLFW_KEY_E))
         {
-            m_position.y += ( m_cameraSpeed * _deltaTime);
+            camPos.y += ( m_cameraSpeed * _deltaTime);
+            
         }
+
+        GetComponent<TransformComponent>()->SetPosition(camPos);
 
         double xPos;
         double yPos;

@@ -63,6 +63,55 @@ Texture* Texture::Load(const char* _filename)
     return texture;
 }
 
+Texture* Texture::LoadCubeMap(const std::vector<std::string>& filenames)
+{
+    Texture* tex = new Texture();
+    glGenTextures(1, &tex->m_tex);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, tex->m_tex);
+
+    stbi_set_flip_vertically_on_load(false);
+
+    int nrChannels;
+    for (unsigned int i = 0; i < filenames.size(); i++)
+    {
+        unsigned char* data = stbi_load(filenames[i].c_str(), &tex->m_width, &tex->m_height,
+                                        &nrChannels, 0);
+        if (data)
+        {
+            if (nrChannels == 4)
+            {
+                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+                             0, GL_RGB, tex->m_width, tex->m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                             data
+                );
+            }
+
+            else
+            {
+                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+                             0, GL_RGB, tex->m_width, tex->m_height, 0, GL_RGB, GL_UNSIGNED_BYTE,
+                             data
+                );
+            }
+
+            stbi_image_free(data);
+        }
+        else
+        {
+            std::cout << "Cubemap tex failed to load at path: " << filenames[i] << std::endl;
+            stbi_image_free(data);
+        }
+    }
+
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    return tex;
+}
+
 unsigned int Texture::GetId()
 {
     return m_tex;

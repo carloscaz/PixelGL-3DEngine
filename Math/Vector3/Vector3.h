@@ -7,7 +7,9 @@ public:
     Vector3();
     Vector3(float _x, float _y, float _z);
 
+    Vector3 operator +(const Vector3& _vector);
     Vector3 operator +=(const Vector3& _vector);
     Vector3 operator-=(const Vector3& _vector);
+    Vector3 operator -(const Vector3& _vector);
     Vector3 operator*(float _number);
 };

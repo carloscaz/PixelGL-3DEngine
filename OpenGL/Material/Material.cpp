@@ -116,13 +116,13 @@ std::string& Material::GetName()
     return m_name;
 }
 
-void Material::ShowGUIDetails()
+void Material::ShowGUIDetails(int _id)
 {
-    if (ImGui::CollapsingHeader("Object Material"))
+    if (ImGui::CollapsingHeader((std::string("Object Material##") + std::to_string(_id)).c_str()))
     {
         ImGui::Text("Object Material: %s", m_name.c_str());
 
-        if (ImGui::TreeNode("Material Textures"))
+        if (ImGui::TreeNode((std::string("Material Textures##") + std::to_string(_id)).c_str()))
         {
             for (Texture* texture : m_textures)
             {
@@ -133,11 +133,8 @@ void Material::ShowGUIDetails()
         }
         
         ImGui::Spacing();
-        if(ImGui::TreeNode("Material Properties"))
+        if(ImGui::TreeNode((std::string("Material Properties##") + std::to_string(_id)).c_str()))
         {
-            ImGui::Text("Material color");
-            ImGui::ColorEdit3("##Material color", &m_color.x);
-            ImGui::Spacing();
             ImGui::Text("Material diffuse");
             ImGui::DragFloat3("##Material diffuse", &m_diffuse.x, 0.01f, 0, 1);
             ImGui::Spacing();
@@ -145,7 +142,7 @@ void Material::ShowGUIDetails()
             ImGui::DragFloat3("##Material specular", &m_specular.x, 0.01f, 0, 1);
             ImGui::Spacing();
             ImGui::Text("Material shininess");
-            ImGui::DragFloat("##Material shininess", &m_shininess, 1, 0, 100);
+            ImGui::DragFloat("##Material shininess", &m_shininess, 1, 1, 100);
             ImGui::TreePop();
         }
      

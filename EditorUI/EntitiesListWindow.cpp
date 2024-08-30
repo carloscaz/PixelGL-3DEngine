@@ -32,12 +32,34 @@ void EntitiesListWindow::DrawWindow()
     
     for (Entity* entity : World::GetInstance()->GetEntities())
     {
-        bool isSelected = (entity == m_selectedEntity);
-        if (ImGui::Selectable(entity->GetName().c_str(), isSelected))
+        if(entity->GetIsSelectable())
         {
-            m_selectedEntity = entity;
-            GUIManager::GetInstance()->GetObjectWindow()->SetObject(entity);
+            bool isSelected = (entity == m_selectedEntity);
+            if (ImGui::Selectable(entity->GetName().c_str(), isSelected))
+            {
+                m_selectedEntity = entity;
+            }
+            if(ImGui::IsItemClicked(ImGuiMouseButton_Left)) //Check if ImGui is pressed with left mouse
+            {
+                GUIManager::GetInstance()->GetObjectWindow()->SetObject(entity);
+            }
+
+            if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) //Check if ImGui is pressed with right mouse
+            {
+                ImGui::OpenPopup("Object Options Menu");
+            }
+        
+            if (ImGui::BeginPopup("Object Options Menu"))
+            {
+                if (ImGui::MenuItem("Delete Entity"))
+                {
+                
+                }
+
+                ImGui::EndPopup();
+            }
         }
     }
+        
     ImGui::End();
 }

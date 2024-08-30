@@ -3,6 +3,7 @@
 
 #include "../../Math/Vector3/Vector3.h"
 
+class Skybox;
 class SpotLight;
 class PointLight;
 class DirectionalLight;
@@ -29,6 +30,9 @@ private:
     float m_lightIntensity = 1.0f;
     Vector3 m_lightColor =  Vector3(1.0f, 1.0f,1.0f);
 
+    Skybox* m_skybox;
+    bool m_skyboxActive;
+
 public:
     ~World();
     static World* GetInstance();
@@ -45,6 +49,8 @@ public:
     void SetActiveCamera(Camera* _camera);
     void SetLightIntensity(float _intensity);
     void SetLightColor(const Vector3 _color);
+    void SetSkybox(Skybox* _skybox);
+    void SetSkybox(bool _value);
 
     Camera* GetActiveCamera() const;
     float GetlightIntensity() const;

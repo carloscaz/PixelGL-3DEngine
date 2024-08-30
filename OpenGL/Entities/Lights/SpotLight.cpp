@@ -73,6 +73,8 @@ void SpotLight::Prepare()
 
 void SpotLight::ShowGUIDetails()
 {
+    Light::ShowGUIDetails();
+    
     if (ImGui::CollapsingHeader("Light Properties"))
     {
         ImGui::Text("Light color");

@@ -5,13 +5,16 @@
 #include "../Entities/Entity.h"
 #include "../Entities/Lights/PointLight.h"
 #include "../Entities/Lights/SpotLight.h"
+#include "../Skybox/Skybox.h"
 #include "ImGui/imgui.h"
 
 World* World::m_instance = nullptr;
 static Entity* m_selectedEntity;
-World::World()
+World::World() :
+m_skyboxActive(true),
+m_window(EntitiesListWindow::GetInstance())
 {
-    m_window = EntitiesListWindow::GetInstance();
+    //m_window = EntitiesListWindow::GetInstance();
     m_selectedEntity = nullptr;
 }
 
@@ -50,6 +53,11 @@ void World::Draw()
     for (Entity* entity : m_entities)
     {
         entity->Draw();
+    }
+    
+    if(m_skybox && m_skyboxActive)
+    {
+        m_skybox->Draw();
     }
 }
 
@@ -107,6 +115,16 @@ Vector3 World::GetLightColor() const
 void World::SetLightColor(const Vector3 _color)
 {
     m_lightColor = _color;
+}
+
+void World::SetSkybox(Skybox* _skybox)
+{
+    m_skybox = _skybox;
+}
+
+void World::SetSkybox(bool _value)
+{
+    m_skyboxActive = _value;
 }
 
 Light* World::GetLight(unsigned int _index)

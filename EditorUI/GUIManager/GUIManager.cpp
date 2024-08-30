@@ -3,6 +3,7 @@
 #include <cstdio>
 
 #include "../EntitiesListWindow.h"
+#include "../LogsWindow.h"
 #include "../ObjectDetailsWindow.h"
 #include "../SceneConfigWindow.h"
 
@@ -12,9 +13,11 @@ GUIManager* GUIManager::m_instance = nullptr;
 
 GUIManager::GUIManager()
 {
-    m_entitiesWindow = EntitiesListWindow::GetInstance();
+    m_windows.push_back(EntitiesListWindow::GetInstance());
+    m_windows.push_back(ObjectDetailsWindow::GetInstance());
     m_objectDetailsWindow = ObjectDetailsWindow::GetInstance();
-    m_sceneConfigWindow = SceneConfigWindow::GetInstance();
+    m_windows.push_back(SceneConfigWindow::GetInstance());
+    m_windows.push_back(LogsWindow::GetInstance());
 }
 
 GUIManager* GUIManager::GetInstance()
@@ -66,13 +69,23 @@ GLFWwindow* GUIManager::GetGlFWwindow() const
     return m_glfwWindow;
 }
 
+void GUIManager::AddWindow(GUIWindow* _window)
+{
+    m_windows.push_back(_window);
+}
+
 void GUIManager::Tick()
 {
 }
 
 void GUIManager::Draw()
 {
-    m_entitiesWindow->DrawWindow();
-    m_objectDetailsWindow->DrawWindow();
-    m_sceneConfigWindow->DrawWindow();
+    // m_entitiesWindow->DrawWindow();
+    // m_objectDetailsWindow->DrawWindow();
+    // m_sceneConfigWindow->DrawWindow();
+
+    for(GUIWindow* window : m_windows)
+    {
+        window->DrawWindow();
+    }
 }
