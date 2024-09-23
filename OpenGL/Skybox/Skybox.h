@@ -19,5 +19,7 @@ public:
     Skybox();
     Skybox(Material* _mat);
 
-    void Draw();
+    ~Skybox();
+
+    void Draw() const; //Draw skybox in the world
 };

@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "Buffers/Buffer.h"
-#include "Components/TransformComponent.h"
+#include "Components/Transform/TransformComponent.h"
 #include "Entities/Camera.h"
 #include "Entities/Lights/DirectionalLight.h"
 #include "Entities/Lights/Light.h"
@@ -271,6 +271,7 @@ bool InitEngine(GLFWwindow*& _window) //Init all engine systems
     io.Fonts->AddFontDefault();
 
     glEnable(GL_DEPTH_TEST); //Enable Depth testing
+    //glDepthFunc(GL_ALWAYS);
     //glEnable(GL_SCISSOR_TEST);
 
     glfwSetFramebufferSizeCallback(_window, framebuffer_size_callback);

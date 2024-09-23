@@ -10,6 +10,7 @@ private:
 public:
     PointLight(Material* _material, std::string& _name);
     PointLight(std::string& _name, Mesh* _mesh);
+    ~PointLight() override;
 
     float GetLightConstant();
     float GetLightLinear();

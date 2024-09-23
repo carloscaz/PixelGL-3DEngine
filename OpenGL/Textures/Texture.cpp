@@ -7,9 +7,14 @@
 #include "stb_image/stb_image.h"
 
 Texture::Texture()
+{}
+
+Texture::~Texture()
 {
+    
 }
 
+//Load function to create textures
 Texture* Texture::Load(const char* _filename)
 {
     Texture* texture = new Texture();
@@ -63,6 +68,7 @@ Texture* Texture::Load(const char* _filename)
     return texture;
 }
 
+//Load function to create cubeMaps
 Texture* Texture::LoadCubeMap(const std::vector<std::string>& filenames)
 {
     Texture* tex = new Texture();
@@ -78,7 +84,7 @@ Texture* Texture::LoadCubeMap(const std::vector<std::string>& filenames)
                                         &nrChannels, 0);
         if (data)
         {
-            if (nrChannels == 4)
+            if (nrChannels == 4)//If 4 channels, image with RGBA
             {
                 glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
                              0, GL_RGB, tex->m_width, tex->m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE,

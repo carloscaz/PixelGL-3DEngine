@@ -1,6 +1,7 @@
 #pragma once
 #include "GUIWindow.h"
 
+//Imgui window for some configs of the scene
 class SceneConfigWindow : public GUIWindow
 {
 private:

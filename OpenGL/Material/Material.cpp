@@ -10,6 +10,7 @@
 #include "../World/World.h"
 #include "ImGui/imgui.h"
 
+
 Material::Material(Texture* _texture, Shader* _shader) : m_shader(_shader), m_name("Default Material")
 {
     m_textures.push_back(_texture);
@@ -30,9 +31,25 @@ Material::Material(Shader* _shader, std::string& _name, const Vector3& _color,
       m_shininess(_shininess)
 {}
 
+Material::~Material()
+{
+    m_shader = nullptr;
+    
+    //Clear textures
+    for(Texture* tex : m_textures)
+    {
+        delete tex;
+    }
+    m_textures.clear();
+}
+
+
 void Material::Prepare()
 {
+    //Activate shader
     m_shader->UseShader();
+
+    //Setting material maps
     m_shader->SetInt("material.diffuseMap", 0);
     m_shader->SetInt("material.specularMap", 1);
     m_shader->SetInt("material.emissionMap", 2);
@@ -42,6 +59,7 @@ void Material::Prepare()
         glBindTexture(GL_TEXTURE_2D, m_textures[i]->GetId());
     }
 
+    //Setting directional light of the world
     if(World::GetInstance()->GetDirectionaLight())
     {
         World::GetInstance()->GetDirectionaLight()->Prepare();
@@ -52,20 +70,11 @@ void Material::Prepare()
         m_shader->SetFloat("dirLight.strength", World::GetInstance()->GetDirectionaLight()->GetLightStrength());
     }
     
-    // for (PointLight* light : World::GetInstance()->GetPointLights())
-    // {
-    //     light->Prepare();
-    // }
-
-    // for(SpotLight* light : World::GetInstance()->GetSpotLights())
-    // {
-    //     light->Prepare();
-    // }
-    
-    //Set lights
+    //Set all pointLights and spotLights of the world
     m_shader->SetInt("numPointLights", World::GetInstance()->GetPointLights().size());
     m_shader->SetInt("numSpotLights", World::GetInstance()->GetSpotLights().size());
 
+    //PointLights properties
     unsigned int pointLightIndex = 0;
     for(PointLight* light : World::GetInstance()->GetPointLights())
     {
@@ -80,6 +89,7 @@ void Material::Prepare()
         ++pointLightIndex;
     }
 
+    //spotLights properties
     unsigned int spotLightIndex = 0;
     for(SpotLight* light : World::GetInstance()->GetSpotLights())
     {
@@ -97,9 +107,10 @@ void Material::Prepare()
         ++spotLightIndex;
     }
     
-    
+    //Setting viewPos of the active camera
     m_shader->SetVec3("viewPos", World::GetInstance()->GetActiveCamera()->GetPosition());
-    
+
+    //Setting material properties
     m_shader->SetVec3("material.color", m_color);
     m_shader->SetVec3("material.diffuse", m_diffuse);
     m_shader->SetVec3("material.specular", m_specular);
@@ -116,12 +127,13 @@ std::string& Material::GetName()
     return m_name;
 }
 
-void Material::ShowGUIDetails(int _id)
+//ImGui material window
+void Material::ShowGUIDetails(int _id) 
 {
     if (ImGui::CollapsingHeader((std::string("Object Material##") + std::to_string(_id)).c_str()))
     {
         ImGui::Text("Object Material: %s", m_name.c_str());
-
+        //Material textures section
         if (ImGui::TreeNode((std::string("Material Textures##") + std::to_string(_id)).c_str()))
         {
             for (Texture* texture : m_textures)
@@ -131,7 +143,8 @@ void Material::ShowGUIDetails(int _id)
             }
             ImGui::TreePop();
         }
-        
+
+        //Material properties section
         ImGui::Spacing();
         if(ImGui::TreeNode((std::string("Material Properties##") + std::to_string(_id)).c_str()))
         {

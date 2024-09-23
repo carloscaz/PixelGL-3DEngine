@@ -1,5 +1,6 @@
 #include "SceneConfigWindow.h"
 
+#include "Log.h"
 #include "LogsWindow.h"
 #include "../OpenGL/GlUtils.h"
 #include "../OpenGL/Entities/Camera.h"
@@ -24,6 +25,7 @@ SceneConfigWindow* SceneConfigWindow::GetInstance()
     return m_instance;
 }
 
+//Draw config scene ImGui window
 void SceneConfigWindow::DrawWindow()
 {
     ImGui::Begin("Scene Config",nullptr, ImGuiWindowFlags_MenuBar);
@@ -31,40 +33,50 @@ void SceneConfigWindow::DrawWindow()
     {
         if (ImGui::BeginMenu("Menu"))
         {
+            //Menu to create new entities in the engine
             if(ImGui::BeginMenu("Create new entity"))
             {
                 ImGui::SeparatorText("Entities list");
+                //Create a cube
                 if(ImGui::MenuItem("Cube"))
                 {
                     GLUtils::CreateCube();
                 }
+                //Create lights menu
                 if(ImGui::BeginMenu("Lights"))
                 {
                     if(ImGui::MenuItem("Directional Light"))
                     {
                         GLUtils::CreateDirectionalLight();
-                        LogsWindow::GetInstance()->AddLog("New Directional Light Created");
+                        std::string message = std::string("New Directional Light Created");
+                        LogsWindow::GetInstance()->AddLog(new Log(message, logCategory::eInfoLog));
                     }
                     if(ImGui::MenuItem("PointLight"))
                     {
                         GLUtils::CreatePointLight();
-                        LogsWindow::GetInstance()->AddLog("New Point Light Created");
+                        std::string message = std::string("New Point Light Created");
+                        LogsWindow::GetInstance()->AddLog(new Log(message, logCategory::eInfoLog));
                     }
                     if(ImGui::MenuItem("SpotLight"))
                     {
                         GLUtils::CreateSpotLight();
-                        LogsWindow::GetInstance()->AddLog("New Spotlight Created");
+                        std::string message = std::string("New Spotlight Created");
+                        LogsWindow::GetInstance()->AddLog(new Log(message, logCategory::eInfoLog));
                     }
                     ImGui::EndMenu();
                 }
+
+                //Create mesh
                 if(ImGui::MenuItem("Mesh"))
                 {
                     GLUtils::CreateDemoMesh();
-                    LogsWindow::GetInstance()->AddLog("Mesh Created");
+                    std::string message = std::string("Mesh Created");
+                    LogsWindow::GetInstance()->AddLog(new Log(message, logCategory::eInfoLog));
                 }
                 ImGui::EndMenu();
-
             }
+
+            //End engine
             if(ImGui::MenuItem("Close engine"))
             {
                 glfwSetWindowShouldClose(GUIManager::GetInstance()->GetGlFWwindow(), true);
@@ -73,7 +85,8 @@ void SceneConfigWindow::DrawWindow()
         }
         ImGui::EndMenuBar();
     }
-    
+
+    //Camera fov modifier
     if (ImGui::CollapsingHeader("Camera Fov"))
     {
         ImGui::Text("Camera Fov:");
@@ -81,20 +94,21 @@ void SceneConfigWindow::DrawWindow()
         World::GetInstance()->GetActiveCamera()->SetCameraFov(m_cameraFov);
     }
 
+    //Enable/Disable skybox
     ImGui::Separator();
     if(ImGui::Checkbox("Skybox Active", &m_skyboxActive))
     {
         World::GetInstance()->SetSkybox(m_skyboxActive);
         if(m_skyboxActive)
         {
-            LogsWindow::GetInstance()->AddLog("Skybox enabled");
+            std::string message = std::string("Skybox enabled");
+            LogsWindow::GetInstance()->AddLog(new Log(message, logCategory::eInfoLog));
         }
-
         else
         {
-            LogsWindow::GetInstance()->AddLog("Skybox disabled");
+            std::string message = std::string("Skybox disabled");
+            LogsWindow::GetInstance()->AddLog(new Log(message, logCategory::eInfoLog));
         }
-        
     }
     ImGui::End();
 }

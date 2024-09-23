@@ -31,6 +31,8 @@ public:
     Entity(Material* _material, const std::string& _name);
     Entity(const std::string& _name, Mesh* _mesh);
     Entity(const std::string& _name, const std::vector<Mesh*>& _meshes);
+
+    virtual ~Entity();
     
     const Vector3& GetPosition();
     const Vector3& GetRotation();
@@ -50,20 +52,27 @@ public:
 
     virtual void ShowGUIDetails();
 
+    virtual void Init();
+    virtual void End();
     virtual void Draw();
+    virtual void Tick(float _deltaTime);
 };
 
 template <class T>
 T* Entity::GetComponent()
 {
-    for(Component* component : m_components)
+    for(int i = 0; i < m_components.size(); ++i)
     {
-        T* comp = dynamic_cast<T*>(component);
+        T* comp = dynamic_cast<T*>(m_components[i]);
         if(comp)
         {
             return comp;
         }
     }
+    // for(Component* component : m_components)
+    // {
+    //     
+    // }
 
     return nullptr;
 }

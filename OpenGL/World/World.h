@@ -16,13 +16,13 @@ class Entity;
 class World
 {
 private:
+    World(); //Construtor private. Creation method with a singleton pattern
+    
     std::vector<Entity*> m_entities;
     std::vector<Light*> m_lights;
     std::vector<PointLight*> m_pointLights;
     std::vector<SpotLight*> m_spotLights;
     DirectionalLight* m_directionalLight;
-    std::vector<const char*> m_entitiesNames;
-    World();
     static World* m_instance;
     EntitiesListWindow* m_window;
 
@@ -32,6 +32,8 @@ private:
 
     Skybox* m_skybox;
     bool m_skyboxActive;
+
+    bool m_worldTickEnabled = false;
 
 public:
     ~World();
@@ -51,13 +53,19 @@ public:
     void SetLightColor(const Vector3 _color);
     void SetSkybox(Skybox* _skybox);
     void SetSkybox(bool _value);
+    void SetWorldTick(bool _value);
+
+    void SaveEntitiesState() const;
 
     Camera* GetActiveCamera() const;
     float GetlightIntensity() const;
     Vector3 GetLightColor() const;
     Light* GetLight(unsigned int _index);
     DirectionalLight* GetDirectionaLight() const;
+    bool GetWorldTick() const;
 
+    void Init(); //Initialization of world ticking
+    void End(); //End of world ticking
     void Tick(float _deltaTime);
-    void Draw();
+    void Draw() const;
 };

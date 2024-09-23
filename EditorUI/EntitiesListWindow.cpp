@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "Log.h"
+#include "LogsWindow.h"
 #include "ImGui/imgui.h"
 #include "../OpenGL/Entities/Entity.h"
 #include "../OpenGL/World/World.h"
@@ -16,6 +18,12 @@ EntitiesListWindow::EntitiesListWindow()
     m_objectWindow = ObjectDetailsWindow::GetInstance();
 }
 
+EntitiesListWindow::~EntitiesListWindow()
+{
+    delete m_objectWindow;
+}
+
+//Singleton pattern
 EntitiesListWindow* EntitiesListWindow::GetInstance()
 {
     if(!m_instance)
@@ -26,8 +34,10 @@ EntitiesListWindow* EntitiesListWindow::GetInstance()
     return m_instance;
 }
 
+//Draw EntitiesList window
 void EntitiesListWindow::DrawWindow()
 {
+    //ImGui window for all the entities of the world
     ImGui::Begin("Entities List");
     
     for (Entity* entity : World::GetInstance()->GetEntities())
@@ -51,15 +61,15 @@ void EntitiesListWindow::DrawWindow()
         
             if (ImGui::BeginPopup("Object Options Menu"))
             {
+                //Delete entity option
                 if (ImGui::MenuItem("Delete Entity"))
                 {
-                
+                    std::string message = "Entity deletion not added yet";
+                    LogsWindow::GetInstance()->AddLog(new Log(message, logCategory::eWarningLog));
                 }
-
                 ImGui::EndPopup();
             }
         }
     }
-        
     ImGui::End();
 }

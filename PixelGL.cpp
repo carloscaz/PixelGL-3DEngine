@@ -15,35 +15,19 @@
 #include "OpenGl/Entities/Camera.h"
 #include "OpenGL/Material/Material.h"
 #include "OpenGL/Material/SkyboxMaterial.h"
-#include "OpenGL/Mesh/Mesh.h"
 #include "OpenGL/Shaders/Shader.h"
 #include "OpenGL/Skybox/Skybox.h"
 
-
+//Basic demo scene of engine
 void CreateSceneDemo()
 {
     //GLUtils::CreateCube();
     //GLUtils::CreatePointLight();
     GLUtils::CreateDirectionalLight();
-}
-int main(void)
-{
-    GLFWwindow* window;
-    if(!InitEngine(window)) //Init all engine systems
-    {
-        glfwTerminate();
-    }
-    GUIManager::GetInstance()->SetGLFWWindow(window);
-    
-    //Texture* woodtexture = Texture::Load("Data/Textures/Wood.png");
-    //std::string woodMaterialName = "Wood Material";
-    //Material* woodMaterial = new Material(woodtexture, lightShader, woodMaterialName, Vector3(1.0f, 1.0f, 1.0f));
 
-    CreateSceneDemo();
-
+    //Setting skybox
     Shader* skyShader = Shader::Load("Data/Shaders/SkyboxShader/VertexShader.glsl",
-                                      "Data/Shaders/SkyboxShader/FragmentShader.glsl");
-
+                                  "Data/Shaders/SkyboxShader/FragmentShader.glsl");
     std::vector<std::string> faces
     {
         "Data/Textures/right.jpg",
@@ -55,50 +39,98 @@ int main(void)
     };
     Texture* cubemapTex = Texture::LoadCubeMap(faces);
     SkyboxMaterial* skyMat = new SkyboxMaterial(cubemapTex, skyShader);
-
     Skybox* sky = new Skybox(skyMat);
     World::GetInstance()->SetSkybox(sky);
-    
+}
+int main(void)
+{
+    //Init all engine systems
+    GLFWwindow* window;
+    if(!InitEngine(window)) 
+    {
+        glfwTerminate();
+    }
+    GUIManager::GetInstance()->SetGLFWWindow(window);
+
+    //Create camera
     Camera* myCamera = new Camera();
     myCamera->SetPosition(Vector3(0,0,3));
     World::GetInstance()->SetActiveCamera(myCamera);
 
-    // Entity* myEntity2 = new Entity(woodMaterial, "Cube2");
-    // myEntity2->SetBuffer(myBuffer);
-    // myEntity2->SetPosition(Vector3(2,0,0));
-    // World::GetInstance()->AddEntity(myEntity2);
-
-    
-    
+    //Setting GLFW framebuffer
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    
     FrameBuffer* framebuffer = new FrameBuffer(windowWidth, windowHeight);
-    
     double lastTime = glfwGetTime();
+    
+    CreateSceneDemo();
     while (!glfwWindowShouldClose(window))
     {
         //Get delta time
         float deltaTime = static_cast<float>(glfwGetTime() - lastTime);
         lastTime = glfwGetTime();
-        
-        World::GetInstance()->Tick(deltaTime);
+
+        //Tick entities of the world
+        World::GetInstance()->GetActiveCamera()->Tick(deltaTime);
+        if(World::GetInstance()->GetWorldTick())
+        {
+            World::GetInstance()->Tick(deltaTime);
+        }
+
+        //Create ImGui windows
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         GUIManager::GetInstance()->CreateDockingSpace();
         //ImGui::ShowDemoWindow();
-        
         framebuffer->Bind();
         //glViewport(0,0,windowWidth, windowHeight);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_DEPTH_BUFFER_BIT);
         glClear(GL_COLOR_BUFFER_BIT);
-        
+
+        //Draw all entities of the world
         World::GetInstance()->Draw();
 
         framebuffer->Unbind();
+
+        //ImGui Scene window
         ImGui::Begin("Scene");
         {
+            //Enable Play button if world is not ticking
+            ImGui::Indent(600);
+            if(!World::GetInstance()->GetWorldTick())
+            {
+                if(ImGui::Button("Play", ImVec2(100, 20)))
+                {
+                    World::GetInstance()->SetWorldTick(true);
+                    World::GetInstance()->Init();
+                }
+            }
+
+            //Disable Play button if world is ticking
+            else
+            {
+                ImGui::BeginDisabled();
+                if(ImGui::Button("Play", ImVec2(100, 20)))
+                {
+                    World::GetInstance()->SetWorldTick(true);
+                    World::GetInstance()->Init();
+                }
+                ImGui::EndDisabled();
+            }
+            
+            ImGui::SameLine();
+            if(ImGui::Button("Stop", ImVec2(100, 20)))
+            {
+                if(World::GetInstance()->GetWorldTick())
+                {
+                    World::GetInstance()->SetWorldTick(false);
+                    World::GetInstance()->End();
+                }
+                
+            }
+            ImGui::Unindent(600);
+            
             ImGui::BeginChild("GameRender");
             windowWidth = ImGui::GetContentRegionAvail().x;
             windowHeight = ImGui::GetContentRegionAvail().y;
@@ -113,12 +145,14 @@ int main(void)
         }
         ImGui::End();
 
+        //ImGui performance window
         ImGui::Begin("Performance Window");
         ImGui::Text("DeltaTime: %f", deltaTime);
         ImGui::Text("Window width: %d", windowWidth);
         ImGui::Text("Window height: %d", windowHeight);
         ImGui::End();
 
+        //Tick & Draw all active windows of the viewport
         GUIManager::GetInstance()->Tick();
         GUIManager::GetInstance()->Draw();
         
@@ -137,6 +171,7 @@ int main(void)
         glfwPollEvents();
     }
 
+    //Clear all engine systems
     delete World::GetInstance();
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();

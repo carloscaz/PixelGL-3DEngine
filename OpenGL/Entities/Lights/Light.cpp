@@ -16,6 +16,11 @@ Light::Light(Material* _material, const std::string& _name)
     m_isSelectable = true;
 }
 
+Light::~Light()
+{
+    
+}
+
 void Light::ShowGUIDetails()
 {
     for(Component* component : m_components)

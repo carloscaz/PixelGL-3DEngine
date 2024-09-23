@@ -14,5 +14,5 @@ public:
     Buffer(const std::vector<Vertex>& _vertices, const std::vector<unsigned int>& _indices);
     ~Buffer();
 
-    void Draw();
+    void Draw(); //Draw buffer
 };

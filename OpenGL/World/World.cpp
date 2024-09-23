@@ -5,6 +5,7 @@
 #include "../Entities/Entity.h"
 #include "../Entities/Lights/PointLight.h"
 #include "../Entities/Lights/SpotLight.h"
+#include "../Entities/Lights/DirectionalLight.h"
 #include "../Skybox/Skybox.h"
 #include "ImGui/imgui.h"
 
@@ -14,21 +15,26 @@ World::World() :
 m_skyboxActive(true),
 m_window(EntitiesListWindow::GetInstance())
 {
-    //m_window = EntitiesListWindow::GetInstance();
     m_selectedEntity = nullptr;
 }
 
 World::~World()
 {
+    //Delete all entities of the world
     for (Entity* entity : m_entities)
     {
         delete entity;
     }
     m_entities.clear();
-    m_lights.clear();
+
+    //Delete all lights of the world
     m_pointLights.clear();
+    delete m_window;
+    delete m_activeCamera;
+    delete m_skybox;
 }
 
+//Singleton pattern
 World* World::GetInstance()
 {
     if (!m_instance)
@@ -38,33 +44,42 @@ World* World::GetInstance()
     return m_instance;
 }
 
-void World::Draw()
+//Draw all elements of the world
+void World::Draw() const
 {
+    //Prepare all point lights of the world
     for (PointLight* pointLight : m_pointLights)
     {
         pointLight->Prepare();
     }
 
+    //Prepare all spot lights of the world
     for (SpotLight* spotLight : m_spotLights)
     {
         spotLight->Prepare();
     }
-    
+
+    //Draw all entities of the world
     for (Entity* entity : m_entities)
     {
         entity->Draw();
     }
-    
+
+    //Draw skybox
     if(m_skybox && m_skyboxActive)
     {
         m_skybox->Draw();
     }
 }
 
+void World::SetWorldTick(bool _value)
+{
+    m_worldTickEnabled = _value;
+}
+
 void World::AddEntity(Entity* _entity)
 {
     m_entities.push_back(_entity);
-    m_entitiesNames.push_back(_entity->GetName().c_str());
 }
 
 void World::AddLight(Light* _light)
@@ -137,6 +152,31 @@ DirectionalLight* World::GetDirectionaLight() const
     return m_directionalLight;
 }
 
+bool World::GetWorldTick() const
+{
+    return m_worldTickEnabled;
+}
+
+//Initialization of world ticking
+void World::Init()
+{
+    //Init all entities of the world
+    for(Entity* entity : m_entities)
+    {
+        entity->Init();
+    }
+}
+
+//End of world ticking
+void World::End()
+{
+    //End all entities of the world
+    for(Entity* entity : m_entities)
+    {
+        entity->End();
+    }
+}
+
 std::vector<Entity*>& World::GetEntities()
 {
     return m_entities;
@@ -157,7 +197,11 @@ std::vector<SpotLight*>& World::GetSpotLights()
     return m_spotLights;
 }
 
+//Tick all entities o the world
 void World::Tick(float _deltaTime)
 {
-    m_activeCamera->Tick(_deltaTime);
+    for(Entity* entity : m_entities)
+    {
+        entity->Tick(_deltaTime);
+    }
 }

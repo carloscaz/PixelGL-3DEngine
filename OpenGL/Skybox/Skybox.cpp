@@ -42,11 +42,25 @@ Skybox::Skybox(Material* _mat)
     m_material = _mat;
 }
 
-void Skybox::Draw()
+Skybox::~Skybox()
+{
+    m_vertices.clear();
+    m_indices.clear();
+    m_material = nullptr;
+    delete m_buffer;
+}
+
+//Draw skybox in the world
+void Skybox::Draw() const
 {
     glDepthFunc(GL_LEQUAL);
+    
+    //Prepare skybox material properties
     m_material->Prepare();
+
+    //Draw skybox
     m_buffer->Draw();
+    
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LESS);
 }

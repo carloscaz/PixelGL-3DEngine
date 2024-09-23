@@ -1,7 +1,7 @@
 #pragma once
 #include "GUIWindow.h"
 class Entity;
-
+//ImGui window for the details of the selected entity
 class ObjectDetailsWindow : public GUIWindow
 {
 private:

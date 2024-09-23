@@ -12,4 +12,5 @@ public:
     Vector3 operator-=(const Vector3& _vector);
     Vector3 operator -(const Vector3& _vector);
     Vector3 operator*(float _number);
+    Vector3 operator/(float _number);
 };

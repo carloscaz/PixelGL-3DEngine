@@ -5,7 +5,7 @@
 
 #include "../../OpenGL/GlUtils.h"
 #include "../../EditorUI/GUIManager/GUIManager.h"
-#include "../Components/TransformComponent.h"
+#include "../Components/Transform/TransformComponent.h"
 #include "../Shaders/Shader.h"
 
 Camera::Camera() :

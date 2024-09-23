@@ -26,6 +26,9 @@ PointLight::PointLight(std::string& _name, Mesh* _mesh)
     m_meshes.push_back(_mesh);
 }
 
+PointLight::~PointLight()
+{}
+
 float PointLight::GetLightConstant()
 {
     return m_constant;
