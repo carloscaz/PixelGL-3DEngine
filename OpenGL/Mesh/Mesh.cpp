@@ -10,7 +10,7 @@
 #include "../Vertex/Vertex.h"
 
 #define TINYOBJLOADER_IMPLEMENTATION
-#include "../include/tinyobjloader-release/tiny_obj_loader.h"
+#include "../../Dependencies/include/tinyobjloader-release/tiny_obj_loader.h"
 
 Mesh::Mesh(Material* _material, Buffer* _buffer) :
     m_material(_material),

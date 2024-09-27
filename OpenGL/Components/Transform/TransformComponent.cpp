@@ -2,7 +2,7 @@
 
 #include "../../EditorUI/LogsWindow.h"
 #include "../../Entities/Entity.h"
-#include "ImGui/imgui.h"
+#include "../../Dependencies/include/ImGui/imgui.h"
 
 TransformComponent::TransformComponent(Entity* _owner) :
     m_position(Vector3(0,0,0)),

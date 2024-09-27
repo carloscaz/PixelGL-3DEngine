@@ -1,6 +1,6 @@
 #pragma once
 #include "../Dependencies/include/glad/glad.h"
-#include "GLFW/glfw3.h"
+#include "../Dependencies/include/GLFW/glfw3.h"
 
 extern int windowWidth;
 extern int windowHeight;

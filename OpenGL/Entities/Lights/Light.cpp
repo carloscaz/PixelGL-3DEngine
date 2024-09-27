@@ -2,7 +2,7 @@
 
 #include "../../Material/Material.h"
 #include "../../Shaders/Shader.h"
-#include "ImGui/imgui.h"
+#include "../../Dependencies/include/ImGui/imgui.h"
 
 Light::Light(Material* _material, const std::string& _name)
     :
