@@ -1,7 +1,7 @@
 #include "Buffer.h"
 
 #include <vector>
-#include <glad/glad.h>
+#include "../../Dependencies/include/glad/glad.h"
 
 #include "../Vertex/Vertex.h"
 
