@@ -1,4 +1,4 @@
-#include <glad/glad.h>
+#include "../Dependencies/include/glad/glad.h"
 #include "GLFW/glfw3.h"
 
 extern int windowWidth;

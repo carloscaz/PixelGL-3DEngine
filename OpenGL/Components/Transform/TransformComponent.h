@@ -1,7 +1,6 @@
 #pragma once
 #include "../Component.h"
 #include "../../Math/Vector3/Vector3.h"
-#include "GLFW/glfw3native.h"
 
 class Entity;
 

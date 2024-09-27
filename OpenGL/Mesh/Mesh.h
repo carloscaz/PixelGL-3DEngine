@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include <glm/detail/type_mat.hpp>
+#include "../../Dependencies/include/glm/detail/type_mat.hpp"
 
 class Buffer;
 class Material;

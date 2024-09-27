@@ -4,7 +4,6 @@
 
 #include "../../Math/Vector3/Vector3.h"
 #include "../Textures/Texture.h"
-#include "../include/glm/glm.hpp"
 
 class Shader;
 
