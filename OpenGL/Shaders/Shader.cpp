@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <glad/glad.h>
+#include "../../Dependencies/include/glad/glad.h"
 
 #include "../../Math/Vector3/Vector3.h"
 #include "../../Dependencies/include/glm/glm.hpp"
